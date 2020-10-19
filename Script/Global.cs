@@ -2,27 +2,29 @@
 
 public class Global : MonoBehaviour
 {
-  /**** Relative to Game Object and View ****/
-  // Unique set of Pieces.
-  public Piece[,] pieces = new Piece[8, 8];
 
   /**** Dependency ****/
   // Board or awaiting pieces to enter in game or that.
   public GameObject whitePiecePrefab;
   public GameObject blackPiecePrefab;
+
+
+  /**** Relative to Game Object and View ****/
+  // Unique set of Pieces.
+  public Piece[,] pieces = new Piece[8, 8];
+  public Piece[,] piecesNotOnBoard = new Piece[2, 8];
+  public int Player = 0;
   // Board du DamiersEcce.
   private Board_Ecce Board_Ecce;
-  private Board_Ecce Board_EcceLayerCastDetection;
   /**** Action ****/
   Vector2 mouseOver;
   Vector2 startDrag;
-  Vector2 endDrag;
+  bool HasMoved = true;
 
-  private int caseLength = 4;
+  private readonly int caseLength = 2;
 
   /**** View ****/
   private Piece selectedPiece;
-
 
   /*
    * Gather all components.
@@ -50,10 +52,9 @@ public class Global : MonoBehaviour
     if (Camera.main && Input.GetMouseButtonDown(0))
     {
       // Getting physics and intersection
-      RaycastHit hit;
-      bool physics = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-         out hit, 100.0f, LayerMask.GetMask("Board_Ecce"));
-      if (physics)
+      bool physicsBoardEcce = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+         out RaycastHit hit, 100.0f, LayerMask.GetMask("Board_Ecce"));
+      if (physicsBoardEcce)
       {
         // saving where the move has begun
         mouseOver.x = (int)hit.point.x;
@@ -64,15 +65,32 @@ public class Global : MonoBehaviour
           {
             // Select one piece
             TrySelectPiece(mouseOver);
-          } else if(GetPiece(mouseOver) == null)
+          }
+          else if(GetPiece(mouseOver) == null)
           {
-            // There are no piece in the next move
+            // Verify There are no piece in the next move
             TryMovePiece(selectedPiece, mouseOver, startDrag);
           } else
           {
-            // The piece is eatean
+            // Either change piece movement or eat
+            Debug.Log("in reselect");
+            TrySelectPiece(mouseOver);
           }
         }
+      }
+      bool physicsWhiteBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+         out _, 100.0f, LayerMask.GetMask("WhiteBanch"));
+      if (physicsWhiteBanch)
+      {
+        selectedPiece = GetPieceOfBanch(Player);
+      }
+
+      bool physicsBlackBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+         out _, 100.0f, LayerMask.GetMask("BlackBanch"));
+      if(physicsBlackBanch)
+      {
+        selectedPiece = GetPieceOfBanch(Player);
+        startDrag = new Vector2(-2 * caseLength + 1, 3 * caseLength);
       }
     }
   }
@@ -91,10 +109,10 @@ public class Global : MonoBehaviour
       ];
   }
 
-  private void TrySelectPiece(Vector2 position)
+  private void TrySelectPiece(Vector2 mouseOver)
   {
-     this.selectedPiece = this.GetPiece(position);
-     this.startDrag = position;
+    selectedPiece = GetPiece(mouseOver);
+    startDrag = mouseOver;
   }
 
   public Vector2 ToArrayCoordinates(Vector2 c)
@@ -113,62 +131,106 @@ public class Global : MonoBehaviour
     );
   }
 
-  public void TryMovePiece(Piece p, Vector2 endDrag, Vector2 startDrag)
+  public void TryMovePiece(Piece p, Vector2 mouseOver, Vector2 startDrag)
   {
     p.transform.position =
-      (Vector3.right * ToBoardCoordinates(endDrag).x) +
-      (Vector3.forward * ToBoardCoordinates(endDrag).y) +
-      (Vector3.up * 2);
+      (Vector3.right * ToBoardCoordinates(mouseOver).x) +
+      (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
+      (Vector3.up * 1);
+    // Checking so that unactive are not disturbing movement.
+    if (startDrag.x > 0 && startDrag.y > 0)
     pieces[
       (int)ToArrayCoordinates(startDrag).x,
       (int)ToArrayCoordinates(startDrag).y
       ] = null;
     pieces[
-      (int) ToArrayCoordinates(endDrag).x,
-      (int)ToArrayCoordinates(endDrag).y
+      (int)ToArrayCoordinates(mouseOver).x,
+      (int)ToArrayCoordinates(mouseOver).y
       ] = p;
-    selectedPiece = null;
-
-
-    if (this.pieces[3, 2] != null)
-    {
-      Debug.Log(startDrag);
-      Debug.Log("test" + this.pieces[3, 2].name);
-    }
+    FinishTurn();
   }
-  public void isFirstPieceMove() { }
 
   /*
    * Set of board of Entries Generator for both types.
    */
   private void GeneratePieces()
   {
-    this.pieces[1, 1] = this.GeneratePiece(whitePiecePrefab,
-      1 * caseLength + 2, 1 * caseLength + 2);
-    this.pieces[6, 1] = this.GeneratePiece(blackPiecePrefab,
-      6 * caseLength + 2, 1 * caseLength + 2);
+    /*
+    pieces[1, 1] = GeneratePiece(whitePiecePrefab,
+      new Vector2(1 * caseLength + 1, 1 * caseLength + 1));
+    pieces[6, 1] = GeneratePiece(blackPiecePrefab,
+      new Vector2(6 * caseLength + 1, 1 * caseLength + 1));
+    */
+    for (var i = 0; i < 2; i++)
+    {
+      for (var j = 0; j < 8; j++)
+      {
+        Piece piece;
+        if(i % 2 == 0)
+        {
+          piece = GeneratePiece(whitePiecePrefab,
+      ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 3 * caseLength)));
+        } else
+        {
+          piece = GeneratePiece(blackPiecePrefab,
+      ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 5 * caseLength)));
+        }
+        piecesNotOnBoard[i, j] = piece;
+        startDrag = ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 5 * caseLength));
+      }
+    }
   }
 
   /**
   * Single Piece Generator.
   */
-  private Piece GeneratePiece(GameObject piecePrefab, int x, int y)
+  private Piece GeneratePiece(GameObject piecePrefab, Vector2 coordinate)
   {
     GameObject go = Instantiate(piecePrefab) as GameObject;
     go.AddComponent<Piece>();
     go.transform.SetParent(Board_Ecce.transform);
     Piece piece = go.GetComponent<Piece>();
-    TryMovePiece(piece, new Vector2(x, y), new Vector2(x, y));
+    piece.transform.position =
+      (Vector3.right * coordinate.x) +
+      (Vector3.forward * coordinate.y) +
+      (Vector3.up * 1);
     return piece;
   }
 
-
-  public void MovePiece(Piece p, int x1, int y1, int x2, int y2)
+  private Piece GetPieceOfBanch(int Player)
   {
-
-
-
+    var i = 0;
+    var found = false;
+    while (i < 7 && !found)
+    {
+      if (piecesNotOnBoard[Player, i] != null)
+      {
+        found = true;
+      }
+      else
+      {
+        i++;
+      }
+    }
+    Piece piece = piecesNotOnBoard[Player, i];
+    piecesNotOnBoard[Player, i] = null;
+    return piece;
   }
 
+  public void FinishTurn()
+  {
+    if(Player == 0)
+    {
+      Player = 1;
+    } else
+    {
+      Player = 0;
+    }
+    startDrag = mouseOver;
+    mouseOver = new Vector2();
+    selectedPiece = null;
+  }
+
+  /** When First Piece is moved, regenerate one **/
 
 }
