@@ -20,6 +20,8 @@ public class Global : MonoBehaviour
   Vector2 mouseOver;
   Vector2 startDrag;
   bool HasMoved = true;
+  int ScorePlayer1 = 0;
+  int ScorePlayer2 = 0;
 
   private readonly int caseLength = 2;
 
@@ -61,36 +63,26 @@ public class Global : MonoBehaviour
         mouseOver.y = (int)hit.point.z;
         if (Input.GetMouseButtonDown(0))
         {
-          if(selectedPiece == null)
+          if (selectedPiece == null)
           {
             // Select one piece
             TrySelectPiece(mouseOver);
+
           }
-          else if(GetPiece(mouseOver) == null)
-          {
+          else if(GameLogic.NormalMove(startDrag, mouseOver)) {
+            // Eating piece
+            Piece advPiece = GetPiece(mouseOver);
+            if (advPiece != null && !advPiece.name.Contains(this.selectedPiece.name.Substring(0, 5)))
+            {
+              Debug.Log("in adv");
+            }
+            else
+            {
+              TryMovePiece(selectedPiece, mouseOver, startDrag);
+            }
             // Verify There are no piece in the next move
-            TryMovePiece(selectedPiece, mouseOver, startDrag);
-          } else
-          {
-            // Either change piece movement or eat
-            Debug.Log("in reselect");
-            TrySelectPiece(mouseOver);
           }
         }
-      }
-      bool physicsWhiteBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-         out _, 100.0f, LayerMask.GetMask("WhiteBanch"));
-      if (physicsWhiteBanch)
-      {
-        selectedPiece = GetPieceOfBanch(Player);
-      }
-
-      bool physicsBlackBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-         out _, 100.0f, LayerMask.GetMask("BlackBanch"));
-      if(physicsBlackBanch)
-      {
-        selectedPiece = GetPieceOfBanch(Player);
-        startDrag = new Vector2(-2 * caseLength + 1, 3 * caseLength);
       }
     }
   }
@@ -113,6 +105,7 @@ public class Global : MonoBehaviour
   {
     selectedPiece = GetPiece(mouseOver);
     startDrag = mouseOver;
+    Debug.Log(selectedPiece);
   }
 
   public Vector2 ToArrayCoordinates(Vector2 c)
@@ -138,7 +131,6 @@ public class Global : MonoBehaviour
       (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
       (Vector3.up * 1);
     // Checking so that unactive are not disturbing movement.
-    if (startDrag.x > 0 && startDrag.y > 0)
     pieces[
       (int)ToArrayCoordinates(startDrag).x,
       (int)ToArrayCoordinates(startDrag).y
@@ -155,25 +147,24 @@ public class Global : MonoBehaviour
    */
   private void GeneratePieces()
   {
-    /*
+    
     pieces[1, 1] = GeneratePiece(whitePiecePrefab,
       new Vector2(1 * caseLength + 1, 1 * caseLength + 1));
     pieces[6, 1] = GeneratePiece(blackPiecePrefab,
       new Vector2(6 * caseLength + 1, 1 * caseLength + 1));
-    */
     for (var i = 0; i < 2; i++)
     {
-      for (var j = 0; j < 8; j++)
+      for (var j = 0; j < 7; j++)
       {
         Piece piece;
         if(i % 2 == 0)
         {
           piece = GeneratePiece(whitePiecePrefab,
-      ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 3 * caseLength)));
+      ToBoardCoordinates(new Vector2(1 * caseLength + 1, 1 * caseLength)));
         } else
         {
           piece = GeneratePiece(blackPiecePrefab,
-      ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 5 * caseLength)));
+      ToBoardCoordinates(new Vector2(6 * caseLength + 1, 1 * caseLength)));
         }
         piecesNotOnBoard[i, j] = piece;
         startDrag = ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 5 * caseLength));
@@ -229,6 +220,11 @@ public class Global : MonoBehaviour
     startDrag = mouseOver;
     mouseOver = new Vector2();
     selectedPiece = null;
+  }
+
+  public void removePiece()
+  {
+
   }
 
   /** When First Piece is moved, regenerate one **/
