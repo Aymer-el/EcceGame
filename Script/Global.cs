@@ -12,14 +12,13 @@ public class Global : MonoBehaviour
   /**** Relative to Game Object and View ****/
   // Unique set of Pieces.
   public Piece[,] pieces = new Piece[8, 8];
-  public Piece[,] piecesNotOnBoard = new Piece[2, 8];
+  public Piece[,] newPiecesNotOnBoard = new Piece[2, 8];
   public int Player = 0;
   // Board du DamiersEcce.
   private Board_Ecce Board_Ecce;
   /**** Action ****/
   Vector2 mouseOver;
   Vector2 startDrag;
-  bool HasMoved = true;
   int ScorePlayer1 = 0;
   int ScorePlayer2 = 0;
 
@@ -53,34 +52,41 @@ public class Global : MonoBehaviour
   {
     if (Camera.main && Input.GetMouseButtonDown(0))
     {
-      // Getting physics and intersection
+      // Getting physics
       bool physicsBoardEcce = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-         out RaycastHit hit, 100.0f, LayerMask.GetMask("Board_Ecce"));
+         out RaycastHit hit, 25.0f, LayerMask.GetMask("Board_Ecce"));
       if (physicsBoardEcce)
       {
-        // saving where the move has begun
+        // Saving mouseOver
         mouseOver.x = (int)hit.point.x;
         mouseOver.y = (int)hit.point.z;
         if (Input.GetMouseButtonDown(0))
         {
           if (selectedPiece == null)
           {
-            // Select one piece
+            // Selecting piece
             TrySelectPiece(mouseOver);
-
           }
-          else if(GameLogic.NormalMove(startDrag, mouseOver)) {
-            // Eating piece
+          else {
             Piece advPiece = GetPiece(mouseOver);
             if (advPiece != null && !advPiece.name.Contains(this.selectedPiece.name.Substring(0, 5)))
             {
-              Debug.Log("in adv");
+              // Eating piece
+              if (GameLogic.IsMovePossible(true, ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
+              {
+                RemovingPiece(ToArrayCoordinates(mouseOver));
+                TryMovePiece(selectedPiece, mouseOver, startDrag);
+
+              }
             }
             else
             {
-              TryMovePiece(selectedPiece, mouseOver, startDrag);
+              // Moving piece
+              if(GameLogic.IsMovePossible(selectedPiece.isEcce, ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
+              {
+                TryMovePiece(selectedPiece, mouseOver, startDrag);
+              }
             }
-            // Verify There are no piece in the next move
           }
         }
       }
@@ -89,11 +95,6 @@ public class Global : MonoBehaviour
 
   private Piece GetPiece(Vector2 position)
   {
-    // If Out of bounds
-    if (position.x < 0 || position.x >= pieces.Length * caseLength
-      && position.y < 0 || position.y >= pieces.Length * caseLength)
-      return null;
-
     // Getting the pieces out of the array
     return pieces[
       (int)ToArrayCoordinates(position).x,
@@ -105,7 +106,10 @@ public class Global : MonoBehaviour
   {
     selectedPiece = GetPiece(mouseOver);
     startDrag = mouseOver;
-    Debug.Log(selectedPiece);
+    if (selectedPiece != null)
+    {
+      selectedPiece.GetComponent<MeshRenderer>().material = selectedPiece.myMaterials[1];
+    }
   }
 
   public Vector2 ToArrayCoordinates(Vector2 c)
@@ -126,19 +130,23 @@ public class Global : MonoBehaviour
 
   public void TryMovePiece(Piece p, Vector2 mouseOver, Vector2 startDrag)
   {
+    // Moving piece
     p.transform.position =
       (Vector3.right * ToBoardCoordinates(mouseOver).x) +
       (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
       (Vector3.up * 1);
-    // Checking so that unactive are not disturbing movement.
+    // Deleting piece in array
     pieces[
       (int)ToArrayCoordinates(startDrag).x,
       (int)ToArrayCoordinates(startDrag).y
       ] = null;
+    // Placing piece in array
     pieces[
       (int)ToArrayCoordinates(mouseOver).x,
       (int)ToArrayCoordinates(mouseOver).y
       ] = p;
+    // In case of a first piece move
+    TryPlaceNewPiece(Player);
     FinishTurn();
   }
 
@@ -147,7 +155,6 @@ public class Global : MonoBehaviour
    */
   private void GeneratePieces()
   {
-    
     pieces[1, 1] = GeneratePiece(whitePiecePrefab,
       new Vector2(1 * caseLength + 1, 1 * caseLength + 1));
     pieces[6, 1] = GeneratePiece(blackPiecePrefab,
@@ -157,7 +164,7 @@ public class Global : MonoBehaviour
       for (var j = 0; j < 7; j++)
       {
         Piece piece;
-        if(i % 2 == 0)
+        if (i % 2 == 0)
         {
           piece = GeneratePiece(whitePiecePrefab,
       ToBoardCoordinates(new Vector2(1 * caseLength + 1, 1 * caseLength)));
@@ -166,7 +173,7 @@ public class Global : MonoBehaviour
           piece = GeneratePiece(blackPiecePrefab,
       ToBoardCoordinates(new Vector2(6 * caseLength + 1, 1 * caseLength)));
         }
-        piecesNotOnBoard[i, j] = piece;
+        newPiecesNotOnBoard[i, j] = piece;
         startDrag = ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 5 * caseLength));
       }
     }
@@ -188,13 +195,13 @@ public class Global : MonoBehaviour
     return piece;
   }
 
-  private Piece GetPieceOfBanch(int Player)
+  private Piece GetANewPiece(int Player)
   {
     var i = 0;
     var found = false;
     while (i < 7 && !found)
     {
-      if (piecesNotOnBoard[Player, i] != null)
+      if (newPiecesNotOnBoard[Player, i] != null)
       {
         found = true;
       }
@@ -203,14 +210,14 @@ public class Global : MonoBehaviour
         i++;
       }
     }
-    Piece piece = piecesNotOnBoard[Player, i];
-    piecesNotOnBoard[Player, i] = null;
+    Piece piece = newPiecesNotOnBoard[Player, i];
+    newPiecesNotOnBoard[Player, i] = null;
     return piece;
   }
 
   public void FinishTurn()
   {
-    if(Player == 0)
+    if (Player == 0)
     {
       Player = 1;
     } else
@@ -219,12 +226,26 @@ public class Global : MonoBehaviour
     }
     startDrag = mouseOver;
     mouseOver = new Vector2();
+    selectedPiece.GetComponent<MeshRenderer>().material = selectedPiece.myMaterials[0];
     selectedPiece = null;
   }
 
-  public void removePiece()
+  public void TryPlaceNewPiece(int player)
   {
+    Piece p = GetANewPiece(Player);
+    if(Player == 0) {
+      pieces[1, 1] = p;
+    } else
+    {
+      pieces[6, 1] = p;
+    }
+  }
 
+  public void RemovingPiece(Vector2 mouseOver)
+  {
+    Debug.Log(mouseOver);
+    pieces[(int)mouseOver.x, (int)mouseOver.y].gameObject.SetActive(false);
+    pieces[(int)mouseOver.x, (int)mouseOver.y] = null;
   }
 
   /** When First Piece is moved, regenerate one **/
