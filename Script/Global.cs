@@ -72,7 +72,8 @@ public class Global : MonoBehaviour
             if (advPiece != null && !advPiece.name.Contains(this.selectedPiece.name.Substring(0, 5)))
             {
               // Eating piece
-              if (GameLogic.IsMovePossible(true, ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
+              if (GameLogic.IsMovePossible(true, selectedPiece.isEcce,
+                ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
               {
                 RemovingPiece(ToArrayCoordinates(mouseOver));
                 TryMovePiece(selectedPiece, mouseOver, startDrag);
@@ -82,7 +83,8 @@ public class Global : MonoBehaviour
             else
             {
               // Moving piece
-              if(GameLogic.IsMovePossible(selectedPiece.isEcce, ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
+              if(GameLogic.IsMovePossible(selectedPiece.isEcce, true,
+                ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
               {
                 TryMovePiece(selectedPiece, mouseOver, startDrag);
               }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public static class GameLogic
 {
-    public static bool IsMovePossible(bool CanGoDiagonal, Vector2 origin, Vector2 move) {
+    public static bool IsMovePossible(bool CanGoDiagonal, bool CanGoHorizontal, Vector2 origin, Vector2 move) {
     if(!CanGoDiagonal)
     {
       // Standard piece move
@@ -12,9 +12,17 @@ public static class GameLogic
         ||
         ((move.y + 2 == origin.y || move.y - 2 == origin.y) && move.x == origin.x)
         );
+    } else if(!CanGoHorizontal)
+    {
+      // Standard piece eating move
+      return (
+        ((move.x + 2 == origin.x || move.x - 2 == origin.x) && (move.y + 2 == origin.y || move.y - 2 == origin.y))
+        ||
+        ((move.y + 2 == origin.y || move.y - 2 == origin.y) && (move.x + 2 == origin.x || move.x - 2 == origin.x))
+        );
     } else
     {
-      // Ecce piece move
+      // Ecce piece move or Ecce piece eating move
       return (
       move.x > 0 && (move.x >= origin.x - 2 && move.x <= origin.x + 2) &&
       move.y > 0 && (move.y >= origin.y - 2 && move.y <= origin.y + 2) &&
