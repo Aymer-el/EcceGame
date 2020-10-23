@@ -108,9 +108,16 @@ public class Global : MonoBehaviour
   {
     selectedPiece = GetPiece(mouseOver);
     startDrag = mouseOver;
+    // Showing selection
     if (selectedPiece != null)
     {
+      // Material selection
       selectedPiece.GetComponent<MeshRenderer>().material = selectedPiece.myMaterials[1];
+      // Perspective selection
+      selectedPiece.gameObject.transform.position =
+        (Vector3.right * ToBoardCoordinates(mouseOver).x) +
+        (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
+        (Vector3.up * 1.1f);
     }
   }
 
