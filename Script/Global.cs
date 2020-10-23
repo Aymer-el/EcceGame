@@ -83,7 +83,7 @@ public class Global : MonoBehaviour
             else
             {
               // Moving piece
-              if(GameLogic.IsMovePossible(selectedPiece.isEcce, true,
+              if(GetPiece(mouseOver) == null && GameLogic.IsMovePossible(selectedPiece.isEcce, true,
                 ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
               {
                 TryMovePiece(selectedPiece, mouseOver, startDrag);
@@ -260,7 +260,6 @@ public class Global : MonoBehaviour
 
   public Piece CheckPieceEvolution(Piece p, Vector2 mouseOver)
   {
-    Debug.Log(p.name);
     if(mouseOver.x == 1 && mouseOver.y == 6 && p.name.Contains("white")
       ||
        mouseOver.x == 6 && mouseOver.y == 6 && p.name.Contains("black")
