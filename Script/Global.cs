@@ -83,6 +83,7 @@ public class Global : MonoBehaviour
             else
             {
               // Moving piece
+              // If there is no piece on the case && if it is a possible move
               if(GetPiece(mouseOver) == null && GameLogic.IsMovePossible(selectedPiece.isEcce, true,
                 ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
               {
