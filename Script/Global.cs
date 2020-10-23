@@ -65,7 +65,7 @@ public class Global : MonoBehaviour
           if (selectedPiece == null)
           {
             // Selecting piece
-            TrySelectPiece(mouseOver);
+            TrySelectPiece(mouseOver, player);
           }
           else {
             Piece advPiece = GetPiece(mouseOver);
@@ -91,7 +91,7 @@ public class Global : MonoBehaviour
               } else
               {
                 DeselectPiece(selectedPiece, startDrag);
-                TrySelectPiece(mouseOver);
+                TrySelectPiece(mouseOver, player);
               }
             }
           }
@@ -109,20 +109,24 @@ public class Global : MonoBehaviour
       ];
   }
 
-  private void TrySelectPiece(Vector2 mouseOver)
+  private void TrySelectPiece(Vector2 mouseOver, int player)
   {
-    selectedPiece = GetPiece(mouseOver);
-    startDrag = mouseOver;
-    // Showing selection
-    if (selectedPiece != null)
+    Piece piece = GetPiece(mouseOver);
+    if (piece != null && IsPlayerPickingRightColorPiece(piece, player))
     {
-      // Material selection
-      selectedPiece.GetComponent<MeshRenderer>().material = selectedPiece.myMaterials[1];
-      // Perspective selection
-      selectedPiece.gameObject.transform.position =
-        (Vector3.right * ToBoardCoordinates(mouseOver).x) +
-        (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
-        (Vector3.up * 1.1f);
+      selectedPiece = piece;
+      startDrag = mouseOver;
+      // Showing selection
+      if (selectedPiece != null)
+      {
+        // Material selection
+        selectedPiece.GetComponent<MeshRenderer>().material = selectedPiece.myMaterials[1];
+        // Perspective selection
+        selectedPiece.gameObject.transform.position =
+          (Vector3.right * ToBoardCoordinates(mouseOver).x) +
+          (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
+          (Vector3.up * 1.1f);
+      }
     }
   }
 
@@ -290,6 +294,13 @@ public class Global : MonoBehaviour
       p.isEcce = true;
     }
     return p;
+  }
+
+  public bool IsPlayerPickingRightColorPiece(Piece piece, int player)
+  {
+    return piece.name.Contains("white") && player == 0
+      ||
+           piece.name.Contains("black") && player == 1;
   }
 
   /** When First Piece is moved, regenerate one **/

@@ -30,5 +30,4 @@ public static class GameLogic
       (move.x != origin.x || move.y != origin.y));
     }
   }
-
 }
