@@ -97,7 +97,7 @@ public class Global : MonoBehaviour
 
   private Piece GetPiece(Vector2 position)
   {
-    // Getting the pieces out of the array
+    // Getting the piece out of the array
     return pieces[
       (int)ToArrayCoordinates(position).x,
       (int)ToArrayCoordinates(position).y
@@ -149,8 +149,10 @@ public class Global : MonoBehaviour
       ] = p;
     // In case of a first piece move
     TryPlaceNewPiece(Player);
+    CheckPieceEvolution(p, ToArrayCoordinates(mouseOver));
     FinishTurn();
   }
+
 
   /*
    * Set of board of Entries Generator for both types.
@@ -245,9 +247,21 @@ public class Global : MonoBehaviour
 
   public void RemovingPiece(Vector2 mouseOver)
   {
-    Debug.Log(mouseOver);
     pieces[(int)mouseOver.x, (int)mouseOver.y].gameObject.SetActive(false);
     pieces[(int)mouseOver.x, (int)mouseOver.y] = null;
+  }
+
+  public Piece CheckPieceEvolution(Piece p, Vector2 mouseOver)
+  {
+    Debug.Log(p.name);
+    if(mouseOver.x == 1 && mouseOver.y == 6 && p.name.Contains("white")
+      ||
+       mouseOver.x == 6 && mouseOver.y == 6 && p.name.Contains("black")
+      )
+    {
+      p.isEcce = true;
+    }
+    return p;
   }
 
   /** When First Piece is moved, regenerate one **/
