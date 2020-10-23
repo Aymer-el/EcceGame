@@ -13,7 +13,7 @@ public class Global : MonoBehaviour
   // Unique set of Pieces.
   public Piece[,] pieces = new Piece[8, 8];
   public Piece[,] newPiecesNotOnBoard = new Piece[2, 8];
-  public int Player = 0;
+  public int player = 0;
   // Board du DamiersEcce.
   private Board_Ecce Board_Ecce;
   /**** Action ****/
@@ -88,6 +88,10 @@ public class Global : MonoBehaviour
                 ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
               {
                 TryMovePiece(selectedPiece, mouseOver, startDrag);
+              } else
+              {
+                DeselectPiece(selectedPiece, startDrag);
+                TrySelectPiece(mouseOver);
               }
             }
           }
@@ -156,9 +160,10 @@ public class Global : MonoBehaviour
       (int)ToArrayCoordinates(mouseOver).y
       ] = p;
     // In case of a first piece move
-    TryPlaceNewPiece(Player);
+    TryPlaceNewPiece(player, ToArrayCoordinates(startDrag));
     CheckPieceEvolution(p, ToArrayCoordinates(mouseOver));
     FinishTurn();
+    DeselectPiece(selectedPiece, mouseOver);
   }
 
 
@@ -207,13 +212,61 @@ public class Global : MonoBehaviour
     return piece;
   }
 
-  private Piece GetANewPiece(int Player)
+  public void RemovingPiece(Vector2 mouseOver)
+  {
+    pieces[(int)mouseOver.x, (int)mouseOver.y].gameObject.SetActive(false);
+    pieces[(int)mouseOver.x, (int)mouseOver.y] = null;
+  }
+
+  public void FinishTurn()
+  {
+    if (player == 0)
+    {
+      player = 1;
+    } else
+    {
+      player = 0;
+    }
+    startDrag = mouseOver;
+    mouseOver = new Vector2();
+  }
+
+  public void DeselectPiece(Piece piece, Vector2 startDrag)
+  {
+    // Deselect the piece
+    selectedPiece.GetComponent<MeshRenderer>().material = selectedPiece.myMaterials[0];
+    selectedPiece.transform.position =
+      (Vector3.right * ToBoardCoordinates(startDrag).x) +
+      (Vector3.forward * ToBoardCoordinates(startDrag).y) +
+      (Vector3.up * 1);
+    selectedPiece = null;
+  }
+
+  public void TryPlaceNewPiece(int player, Vector2 startDrag)
+  {
+    if((startDrag.x == 1 && startDrag.y == 1)
+      ||
+      (startDrag.x == 6 && startDrag.y == 1))
+    {
+      Piece p = GetANewPiece(player);
+      if (player == 0)
+      {
+        pieces[1, 1] = p;
+      }
+      else
+      {
+        pieces[6, 1] = p;
+      }
+    }
+  }
+
+  private Piece GetANewPiece(int player)
   {
     var i = 0;
     var found = false;
     while (i < 7 && !found)
     {
-      if (newPiecesNotOnBoard[Player, i] != null)
+      if (newPiecesNotOnBoard[player, i] != null)
       {
         found = true;
       }
@@ -222,41 +275,9 @@ public class Global : MonoBehaviour
         i++;
       }
     }
-    Piece piece = newPiecesNotOnBoard[Player, i];
-    newPiecesNotOnBoard[Player, i] = null;
+    Piece piece = newPiecesNotOnBoard[player, i];
+    newPiecesNotOnBoard[player, i] = null;
     return piece;
-  }
-
-  public void FinishTurn()
-  {
-    if (Player == 0)
-    {
-      Player = 1;
-    } else
-    {
-      Player = 0;
-    }
-    startDrag = mouseOver;
-    mouseOver = new Vector2();
-    selectedPiece.GetComponent<MeshRenderer>().material = selectedPiece.myMaterials[0];
-    selectedPiece = null;
-  }
-
-  public void TryPlaceNewPiece(int player)
-  {
-    Piece p = GetANewPiece(Player);
-    if(Player == 0) {
-      pieces[1, 1] = p;
-    } else
-    {
-      pieces[6, 1] = p;
-    }
-  }
-
-  public void RemovingPiece(Vector2 mouseOver)
-  {
-    pieces[(int)mouseOver.x, (int)mouseOver.y].gameObject.SetActive(false);
-    pieces[(int)mouseOver.x, (int)mouseOver.y] = null;
   }
 
   public Piece CheckPieceEvolution(Piece p, Vector2 mouseOver)
