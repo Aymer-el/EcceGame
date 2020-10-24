@@ -19,8 +19,8 @@ public class Global : MonoBehaviour
   /**** Action ****/
   Vector2 mouseOver;
   Vector2 startDrag;
-  int ScorePlayer1 = 0;
-  int ScorePlayer2 = 0;
+  int scorePlayer0 = 0;
+  int scorePlayer1 = 0;
 
   private readonly int caseLength = 2;
 
@@ -77,7 +77,6 @@ public class Global : MonoBehaviour
               {
                 RemovingPiece(ToArrayCoordinates(mouseOver));
                 TryMovePiece(selectedPiece, mouseOver, startDrag);
-
               }
             }
             else
@@ -94,9 +93,22 @@ public class Global : MonoBehaviour
                 TrySelectPiece(mouseOver, player);
               }
             }
-          }
+          } 
         }
       }
+      // Getting physics
+      bool physicsWhiteBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+        out RaycastHit hit1, 50f, LayerMask.GetMask("WhiteBanch"));
+      if(physicsWhiteBanch)
+      {
+        Piece piece = GetANewPiece(player);
+        if(piece != null)
+        {
+          TryPlaceNewPiece(player, piece);
+          TrySelectPiece(mouseOver, player);
+        }
+      }
+
     }
   }
 
@@ -164,7 +176,7 @@ public class Global : MonoBehaviour
       (int)ToArrayCoordinates(mouseOver).y
       ] = p;
     // In case of a first piece move
-    TryPlaceNewPiece(player, ToArrayCoordinates(startDrag));
+    //TryPlaceNewPiece(player, ToArrayCoordinates(startDrag));
     CheckPieceEvolution(p, ToArrayCoordinates(mouseOver));
     FinishTurn();
     DeselectPiece(selectedPiece, mouseOver);
@@ -176,10 +188,6 @@ public class Global : MonoBehaviour
    */
   private void GeneratePieces()
   {
-    pieces[1, 1] = GeneratePiece(whitePiecePrefab,
-      new Vector2(1 * caseLength + 1, 1 * caseLength + 1));
-    pieces[6, 1] = GeneratePiece(blackPiecePrefab,
-      new Vector2(6 * caseLength + 1, 1 * caseLength + 1));
     for (var i = 0; i < 2; i++)
     {
       for (var j = 0; j < 7; j++)
@@ -188,14 +196,15 @@ public class Global : MonoBehaviour
         if (i % 2 == 0)
         {
           piece = GeneratePiece(whitePiecePrefab,
-      ToBoardCoordinates(new Vector2(1 * caseLength + 1, 1 * caseLength)));
+            ToBoardCoordinates(new Vector2(-3, 2)));
         } else
         {
           piece = GeneratePiece(blackPiecePrefab,
-      ToBoardCoordinates(new Vector2(6 * caseLength + 1, 1 * caseLength)));
+            ToBoardCoordinates(new Vector2(18, 2)));
         }
         newPiecesNotOnBoard[i, j] = piece;
         startDrag = ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 5 * caseLength));
+        // Moving piece
       }
     }
   }
@@ -246,21 +255,24 @@ public class Global : MonoBehaviour
     selectedPiece = null;
   }
 
-  public void TryPlaceNewPiece(int player, Vector2 startDrag)
+  public void TryPlaceNewPiece(int player, Piece piece)
   {
-    if((startDrag.x == 1 && startDrag.y == 1)
-      ||
-      (startDrag.x == 6 && startDrag.y == 1))
+    Vector2 position;
+    if (piece != null && player == 0)
     {
-      Piece p = GetANewPiece(player);
-      if (player == 0)
-      {
-        pieces[1, 1] = p;
-      }
-      else
-      {
-        pieces[6, 1] = p;
-      }
+      position = new Vector2(1, 1);
+      piece.transform.position =
+                  (Vector3.right * ToArrayCoordinates(position).x) +
+                  (Vector3.forward * ToArrayCoordinates(position).y) +
+                  (Vector3.up * 1);
+    }
+    else if (piece != null && player == 1 && (mouseOver.x == 6 && mouseOver.y == 1))
+    {
+      position = new Vector2(1, 6);
+      piece.transform.position =
+                  (Vector3.right * ToBoardCoordinates(position).x) +
+                  (Vector3.forward * ToBoardCoordinates(position).y) +
+                  (Vector3.up * 1);
     }
   }
 
@@ -279,9 +291,7 @@ public class Global : MonoBehaviour
         i++;
       }
     }
-    Piece piece = newPiecesNotOnBoard[player, i];
-    newPiecesNotOnBoard[player, i] = null;
-    return piece;
+    return newPiecesNotOnBoard[player, i];
   }
 
   public Piece CheckPieceEvolution(Piece p, Vector2 mouseOver)
@@ -294,6 +304,24 @@ public class Global : MonoBehaviour
       p.isEcce = true;
     }
     return p;
+  }
+
+  public void CheckOneUp(Piece p, Vector2 mouseOver)
+  {
+    if (mouseOver.x == 1 && mouseOver.y == 1 && p.name.Contains("black")
+      ||
+       mouseOver.x == 6 && mouseOver.y == 1 && p.name.Contains("white")
+      )
+    {
+      if(player == 0)
+      {
+        scorePlayer0++;
+      } else
+      {
+        scorePlayer1++;
+      }
+      RemovingPiece(ToArrayCoordinates(mouseOver));
+    }
   }
 
   public bool IsPlayerPickingRightColorPiece(Piece piece, int player)
