@@ -886,13 +886,27 @@ GameObject:
   - component: {fileID: 1731848232569036170}
   - component: {fileID: 1000723813673975719}
   - component: {fileID: 5411961958725068342}
-  m_Layer: 0
+  - component: {fileID: 6374057907161744440}
+  m_Layer: 11
   m_Name: BlackBach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &6374057907161744440
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6374057907161744439}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 1.9999998, z: 1.0499998}
+  m_Center: {x: 0, y: 0, z: -0.47499993}
 --- !u!4 &6738320136654139117
 Transform:
   m_ObjectHideFlags: 0

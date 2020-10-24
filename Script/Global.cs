@@ -52,10 +52,11 @@ public class Global : MonoBehaviour
   {
     if (Camera.main && Input.GetMouseButtonDown(0))
     {
-      // Getting physics
       bool physicsBoardEcce = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
          out RaycastHit hit, 25.0f, LayerMask.GetMask("Board_Ecce"));
-      if (physicsBoardEcce)
+      bool physicsBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+        out RaycastHit hit1, 50f, LayerMask.GetMask("Banch"));
+      if (physicsBoardEcce || physicsBanch)
       {
         // Saving mouseOver
         mouseOver.x = (int)hit.point.x;
@@ -64,10 +65,18 @@ public class Global : MonoBehaviour
         {
           if (selectedPiece == null)
           {
-            // Selecting piece
-            TrySelectPiece(mouseOver, player);
+            // Selecting a new piece
+            if (physicsBanch)
+            {
+              TryPlaceNewPiece(player);
+            } else
+            // Selecting a piece
+            {
+              TrySelectPiece(mouseOver, player);
+            }
           }
-          else {
+          else
+          {
             Piece advPiece = GetPiece(mouseOver);
             if (advPiece != null && !advPiece.name.Contains(this.selectedPiece.name.Substring(0, 5)))
             {
@@ -83,32 +92,21 @@ public class Global : MonoBehaviour
             {
               // Moving piece
               // If there is no piece on the case && if it is a possible move
-              if(GetPiece(mouseOver) == null && GameLogic.IsMovePossible(selectedPiece.isEcce, true,
+              if (GetPiece(mouseOver) == null && GameLogic.IsMovePossible(selectedPiece.isEcce, true,
                 ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
               {
                 TryMovePiece(selectedPiece, mouseOver, startDrag);
-              } else
+              }
+              // Selecting another piece
+              else
               {
                 DeselectPiece(selectedPiece, startDrag);
                 TrySelectPiece(mouseOver, player);
               }
             }
-          } 
+          }
         }
       }
-      // Getting physics
-      bool physicsWhiteBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-        out RaycastHit hit1, 50f, LayerMask.GetMask("WhiteBanch"));
-      if(physicsWhiteBanch)
-      {
-        Piece piece = GetANewPiece(player);
-        if(piece != null)
-        {
-          TryPlaceNewPiece(player, piece);
-          TrySelectPiece(mouseOver, player);
-        }
-      }
-
     }
   }
 
@@ -255,24 +253,20 @@ public class Global : MonoBehaviour
     selectedPiece = null;
   }
 
-  public void TryPlaceNewPiece(int player, Piece piece)
+  public void TryPlaceNewPiece(int player)
   {
-    Vector2 position;
-    if (piece != null && player == 0)
+    selectedPiece = GetANewPiece(player);
+    if (player == 0 && pieces[1, 1] == null && selectedPiece)
     {
-      position = new Vector2(1, 1);
-      piece.transform.position =
-                  (Vector3.right * ToArrayCoordinates(position).x) +
-                  (Vector3.forward * ToArrayCoordinates(position).y) +
-                  (Vector3.up * 1);
+      TryMovePiece(selectedPiece,
+        new Vector2(1 * caseLength, 1 * caseLength),
+        new Vector2(1 * caseLength, 1 * caseLength));
     }
-    else if (piece != null && player == 1 && (mouseOver.x == 6 && mouseOver.y == 1))
+    if (player == 1 && pieces[6, 1] == null && selectedPiece)
     {
-      position = new Vector2(1, 6);
-      piece.transform.position =
-                  (Vector3.right * ToBoardCoordinates(position).x) +
-                  (Vector3.forward * ToBoardCoordinates(position).y) +
-                  (Vector3.up * 1);
+      TryMovePiece(selectedPiece,
+        new Vector2(6 * caseLength, 1 * caseLength),
+        new Vector2(6 * caseLength, 1 * caseLength));
     }
   }
 
@@ -291,7 +285,9 @@ public class Global : MonoBehaviour
         i++;
       }
     }
-    return newPiecesNotOnBoard[player, i];
+    Piece piece = newPiecesNotOnBoard[player, i];
+    newPiecesNotOnBoard[player, i] = null;
+    return piece;
   }
 
   public Piece CheckPieceEvolution(Piece p, Vector2 mouseOver)
