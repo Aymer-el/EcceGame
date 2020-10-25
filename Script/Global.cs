@@ -55,8 +55,8 @@ public class Global : MonoBehaviour
       "White score: " + scoreWhite.ToString() +
       "   -- nPal GAME --   " +
     "Black score: " + scoreBlack.ToString();
-    piecesLeftWhite.text = "White pieces \n to play:" + NumberOfANewPiece(0).ToString();
-    piecesLeftBlack.text = "Black pieces \n to play:" + NumberOfANewPiece(1).ToString();
+    piecesLeftWhite.text = "White pieces \nto play: " + NumberOfANewPiece(0).ToString();
+    piecesLeftBlack.text = "Black pieces \nto play: " + NumberOfANewPiece(1).ToString();
   }
 
   /*
