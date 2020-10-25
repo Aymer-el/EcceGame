@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Global : MonoBehaviour
 {
@@ -7,7 +8,9 @@ public class Global : MonoBehaviour
   // Board or awaiting pieces to enter in game or that.
   public GameObject whitePiecePrefab;
   public GameObject blackPiecePrefab;
-
+  public Text scoreText;
+  public Text piecesLeftBlack;
+  public Text piecesLeftWhite;
 
   /**** Relative to Game Object and View ****/
   // Unique set of Pieces.
@@ -19,8 +22,10 @@ public class Global : MonoBehaviour
   /**** Action ****/
   Vector2 mouseOver;
   Vector2 startDrag;
-  int scorePlayer0 = 0;
-  int scorePlayer1 = 0;
+
+
+  int scoreWhite = 0;
+  int scoreBlack = 0;
 
   private readonly int caseLength = 2;
 
@@ -34,6 +39,9 @@ public class Global : MonoBehaviour
   public void Awake()
   {
     Board_Ecce = GetComponentInChildren<Board_Ecce>();
+    scoreText = GetComponentInChildren<Text>();
+    piecesLeftBlack = GameObject.Find("piecesLeftBlack").GetComponent<Text>();
+    piecesLeftWhite = GameObject.Find("piecesLeftWhite").GetComponent<Text>();
     this.GeneratePieces();
   }
 
@@ -43,6 +51,12 @@ public class Global : MonoBehaviour
   private void Update()
   {
     this.UpdateMouseOver();
+    scoreText.text =
+      "White score: " + scoreWhite.ToString() +
+      "   -- nPal GAME --   " +
+    "Black score: " + scoreBlack.ToString();
+    piecesLeftWhite.text = "White pieces \n to play:" + NumberOfANewPiece(0).ToString();
+    piecesLeftBlack.text = "Black pieces \n to play:" + NumberOfANewPiece(1).ToString();
   }
 
   /*
@@ -276,7 +290,7 @@ public class Global : MonoBehaviour
   {
     var i = 0;
     var found = false;
-    while (i < 7 && !found)
+    while (i <= 7 && !found)
     {
       if (newPiecesNotOnBoard[player, i] != null)
       {
@@ -313,10 +327,10 @@ public class Global : MonoBehaviour
     {
       if(player == 0)
       {
-        scorePlayer0++;
+        scoreWhite++;
       } else
       {
-        scorePlayer1++;
+        scoreBlack++;
       }
       RemovingPiece(mouseOver);
     }
@@ -327,6 +341,24 @@ public class Global : MonoBehaviour
     return piece.name.Contains("white") && player == 0
       ||
            piece.name.Contains("black") && player == 1;
+  }
+
+  public int NumberOfANewPiece(int player)
+  {
+    var i = 0;
+    var found = false;
+    while (i < 7 && !found)
+    {
+      if (newPiecesNotOnBoard[player, i] != null)
+      {
+        found = true;
+      }
+      else
+      {
+        i++;
+      }
+    }
+    return newPiecesNotOnBoard.Length/2 - (i +1);
   }
 
   /** When First Piece is moved, regenerate one **/
