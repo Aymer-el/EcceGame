@@ -176,6 +176,7 @@ public class Global : MonoBehaviour
     // In case of a first piece move
     //TryPlaceNewPiece(player, ToArrayCoordinates(startDrag));
     CheckPieceEvolution(p, ToArrayCoordinates(mouseOver));
+    CheckOneUp(p, ToArrayCoordinates(mouseOver));
     FinishTurn();
     DeselectPiece(selectedPiece, mouseOver);
   }
@@ -255,15 +256,16 @@ public class Global : MonoBehaviour
 
   public void TryPlaceNewPiece(int player)
   {
-    selectedPiece = GetANewPiece(player);
-    if (player == 0 && pieces[1, 1] == null && selectedPiece)
+    if (player == 0 && pieces[1, 1] == null)
     {
+      selectedPiece = GetANewPiece(player);
       TryMovePiece(selectedPiece,
         new Vector2(1 * caseLength, 1 * caseLength),
         new Vector2(1 * caseLength, 1 * caseLength));
     }
-    if (player == 1 && pieces[6, 1] == null && selectedPiece)
+    if (player == 1 && pieces[6, 1] == null)
     {
+      selectedPiece = GetANewPiece(player);
       TryMovePiece(selectedPiece,
         new Vector2(6 * caseLength, 1 * caseLength),
         new Vector2(6 * caseLength, 1 * caseLength));
@@ -316,7 +318,7 @@ public class Global : MonoBehaviour
       {
         scorePlayer1++;
       }
-      RemovingPiece(ToArrayCoordinates(mouseOver));
+      RemovingPiece(mouseOver);
     }
   }
 
