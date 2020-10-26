@@ -9,8 +9,6 @@ public class Global : MonoBehaviour
   public GameObject whitePiecePrefab;
   public GameObject blackPiecePrefab;
   public Text scoreText;
-  public Text piecesLeftBlack;
-  public Text piecesLeftWhite;
 
   /**** Relative to Game Object and View ****/
   // Unique set of Pieces.
@@ -40,8 +38,6 @@ public class Global : MonoBehaviour
   {
     Board_Ecce = GetComponentInChildren<Board_Ecce>();
     scoreText = GetComponentInChildren<Text>();
-    piecesLeftBlack = GameObject.Find("piecesLeftBlack").GetComponent<Text>();
-    piecesLeftWhite = GameObject.Find("piecesLeftWhite").GetComponent<Text>();
     this.GeneratePieces();
   }
 
@@ -55,8 +51,6 @@ public class Global : MonoBehaviour
       "White score: " + scoreWhite.ToString() +
       "   -- nPal GAME --   " +
     "Black score: " + scoreBlack.ToString();
-    piecesLeftWhite.text = "White pieces \nto play: " + NumberOfANewPiece(0).ToString();
-    piecesLeftBlack.text = "Black pieces \nto play: " + NumberOfANewPiece(1).ToString();
   }
 
   /*
@@ -209,14 +203,14 @@ public class Global : MonoBehaviour
         if (i % 2 == 0)
         {
           piece = GeneratePiece(whitePiecePrefab,
-            ToBoardCoordinates(new Vector2(-3, 2)));
+            ToBoardCoordinates(new Vector2(-1, j * caseLength)));
         } else
         {
           piece = GeneratePiece(blackPiecePrefab,
-            ToBoardCoordinates(new Vector2(18, 2)));
+            ToBoardCoordinates(new Vector2(17, j * caseLength)));
         }
         newPiecesNotOnBoard[i, j] = piece;
-        startDrag = ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 5 * caseLength));
+        //startDrag = ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 5 * caseLength));
         // Moving piece
       }
     }
