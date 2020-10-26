@@ -16,6 +16,7 @@ public class Global : MonoBehaviour
   // Unique set of Pieces.
   public Piece[,] pieces = new Piece[8, 8];
   public Piece[,] newPiecesNotOnBoard = new Piece[2, 8];
+  public Piece[,] newPalPiece = new Piece[2, 8];
   public int player = 0;
   // Board du DamiersEcce.
   private Board_Ecce Board_Ecce;
@@ -185,7 +186,7 @@ public class Global : MonoBehaviour
       ] = p;
     // In case of a first piece move
     //TryPlaceNewPiece(player, ToArrayCoordinates(startDrag));
-    CheckPieceEvolution(p, ToArrayCoordinates(mouseOver));
+    CheckPieceEvolution(mouseOver, player);
     CheckOneUp(p, ToArrayCoordinates(mouseOver));
     FinishTurn();
     DeselectPiece(selectedPiece, mouseOver);
@@ -217,6 +218,8 @@ public class Global : MonoBehaviour
             ToBoardCoordinates(new Vector2(21, j * caseLength)));
         }
         newPiecesNotOnBoard[i, j] = piece;
+        pal.isEcce = true;
+        newPalPiece[i, j] = pal;
       }
     }
   }
@@ -305,16 +308,49 @@ public class Global : MonoBehaviour
     return piece;
   }
 
-  public Piece CheckPieceEvolution(Piece p, Vector2 mouseOver)
+  private Piece GetANewPalPiece(int player)
   {
-    if(mouseOver.x == 1 && mouseOver.y == 6 && p.name.Contains("white")
-      ||
-       mouseOver.x == 6 && mouseOver.y == 6 && p.name.Contains("black")
-      )
+    var i = 0;
+    var found = false;
+    while (i <= 7 && !found)
     {
-      p.isEcce = true;
+      if (newPalPiece[player, i] != null)
+      {
+        found = true;
+      }
+      else
+      {
+        i++;
+      }
     }
-    return p;
+    Piece piece = newPalPiece[player, i];
+    newPalPiece[player, i] = null;
+    return piece;
+  }
+
+  public void CheckPieceEvolution(Vector2 mouseOver, int player)
+  {
+    Vector2 arrayCoordinates = ToArrayCoordinates(mouseOver);
+    Vector2 boardCoordinates = ToBoardCoordinates(mouseOver);
+    Piece piece = GetPiece(mouseOver);
+    if (!piece.isEcce)
+    {
+      if (arrayCoordinates.x == 1 && arrayCoordinates.y == 6
+        && player == 0
+        ||
+         arrayCoordinates.x == 6 && arrayCoordinates.y == 6
+         && player == 1
+        )
+      {
+        Piece pal = GetANewPalPiece(player);
+        RemovingPiece(arrayCoordinates);
+        pieces[(int)arrayCoordinates.x, (int)arrayCoordinates.y] = pal;
+        pal.transform.position =
+        (Vector3.right * boardCoordinates.x) +
+        (Vector3.forward * boardCoordinates.y) +
+        (Vector3.up * 1);
+      }
+    }
   }
 
   public void CheckOneUp(Piece p, Vector2 mouseOver)
@@ -359,6 +395,7 @@ public class Global : MonoBehaviour
     }
     return newPiecesNotOnBoard.Length/2 - (i +1);
   }
+
 
   /** When First Piece is moved, regenerate one **/
 

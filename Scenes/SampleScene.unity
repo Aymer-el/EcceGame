@@ -965,9 +965,9 @@ MonoBehaviour:
     type: 3}
   blackPiecePrefab: {fileID: 4652760122100052945, guid: c21a3556034f64efea030673efd63435,
     type: 3}
-  whitePalPrefab: {fileID: 6531134853355565758, guid: e1a0778e97cd24d1390e581ab5d621fd,
+  whitePalPrefab: {fileID: 993720079779546464, guid: bfa1272f66a244fcda16fa252ace06bf,
     type: 3}
-  blackPalPrefab: {fileID: 4076549832709275545, guid: ec6798779bb6d48469d4ef029503297f,
+  blackPalPrefab: {fileID: 5410449196535727276, guid: 49660311a5fad4a76a1050525fc7c6e1,
     type: 3}
   scoreText: {fileID: 478441441}
   player: 0
