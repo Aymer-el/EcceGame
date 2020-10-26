@@ -8,6 +8,8 @@ public class Global : MonoBehaviour
   // Board or awaiting pieces to enter in game or that.
   public GameObject whitePiecePrefab;
   public GameObject blackPiecePrefab;
+  public GameObject whitePalPrefab;
+  public GameObject blackPalPrefab;
   public Text scoreText;
 
   /**** Relative to Game Object and View ****/
@@ -200,18 +202,21 @@ public class Global : MonoBehaviour
       for (var j = 0; j < 7; j++)
       {
         Piece piece;
+        Piece pal;
         if (i % 2 == 0)
         {
           piece = GeneratePiece(whitePiecePrefab,
             ToBoardCoordinates(new Vector2(-1, j * caseLength)));
+          pal = GeneratePiece(whitePalPrefab,
+            ToBoardCoordinates(new Vector2(-5, j * caseLength)));
         } else
         {
           piece = GeneratePiece(blackPiecePrefab,
             ToBoardCoordinates(new Vector2(17, j * caseLength)));
+          pal = GeneratePiece(blackPalPrefab,
+            ToBoardCoordinates(new Vector2(21, j * caseLength)));
         }
         newPiecesNotOnBoard[i, j] = piece;
-        //startDrag = ToBoardCoordinates(new Vector2(-2 * caseLength + 1, 5 * caseLength));
-        // Moving piece
       }
     }
   }
