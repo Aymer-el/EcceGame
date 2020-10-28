@@ -10,7 +10,9 @@ public class Global : MonoBehaviour
   public GameObject blackPiecePrefab;
   public GameObject whitePalPrefab;
   public GameObject blackPalPrefab;
-  public Text scoreText;
+  public GameObject[] scoreTexts = new GameObject[8];
+  public Text scoreWhite;
+  public Text scoreBlack;
 
   /**** Relative to Game Object and View ****/
   // Unique set of Pieces.
@@ -25,8 +27,8 @@ public class Global : MonoBehaviour
   Vector2 startDrag;
 
 
-  int scoreWhite = 0;
-  int scoreBlack = 0;
+  int scoreWhiteInt = 0;
+  int scoreBlackInt = 0;
 
   private readonly int caseLength = 2;
 
@@ -40,7 +42,8 @@ public class Global : MonoBehaviour
   public void Awake()
   {
     Board_Ecce = GetComponentInChildren<Board_Ecce>();
-    scoreText = GetComponentInChildren<Text>();
+    scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
+    scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
     this.GeneratePieces();
   }
 
@@ -50,10 +53,8 @@ public class Global : MonoBehaviour
   private void Update()
   {
     this.UpdateMouseOver();
-    scoreText.text =
-      "White score: " + scoreWhite.ToString() +
-      "   -- nPal GAME --   " +
-    "Black score: " + scoreBlack.ToString();
+    scoreWhite.text = scoreWhiteInt.ToString();
+    scoreBlack.text = scoreBlackInt.ToString();
   }
 
   /*
@@ -187,7 +188,7 @@ public class Global : MonoBehaviour
     // In case of a first piece move
     //TryPlaceNewPiece(player, ToArrayCoordinates(startDrag));
     CheckPieceEvolution(mouseOver, player);
-    CheckOneUp(p, ToArrayCoordinates(mouseOver));
+    CheckOneUp(p, ToArrayCoordinates(mouseOver), player);
     FinishTurn();
     DeselectPiece(selectedPiece, mouseOver);
   }
@@ -353,7 +354,7 @@ public class Global : MonoBehaviour
     }
   }
 
-  public void CheckOneUp(Piece p, Vector2 mouseOver)
+  public void CheckOneUp(Piece p, Vector2 mouseOver, int player)
   {
     if (mouseOver.x == 1 && mouseOver.y == 1 && p.name.Contains("black")
       ||
@@ -362,10 +363,10 @@ public class Global : MonoBehaviour
     {
       if(player == 0)
       {
-        scoreWhite++;
+        scoreWhiteInt++;
       } else
       {
-        scoreBlack++;
+        scoreBlackInt++;
       }
       RemovingPiece(mouseOver);
     }
