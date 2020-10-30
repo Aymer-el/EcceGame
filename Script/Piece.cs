@@ -8,7 +8,7 @@ using UnityEngine;
 public class Piece: MonoBehaviour {
 
     /**** Dependency ****/
-    public Board_Ecce Board { get; private set; }
+    public NPalBoard Board { get; private set; }
     public bool isEcce = false;
     public Material[] myMaterials = new Material[2];
 

@@ -10,7 +10,7 @@ public class Global : MonoBehaviour
   public GameObject blackPiecePrefab;
   public GameObject whitePalPrefab;
   public GameObject blackPalPrefab;
-  public GameObject[] scoreTexts = new GameObject[8];
+//  public GameObject[] scoreTexts = new GameObject[8];
   public Text scoreWhite;
   public Text scoreBlack;
 
@@ -20,8 +20,6 @@ public class Global : MonoBehaviour
   public Piece[,] newPiecesNotOnBoard = new Piece[2, 8];
   public Piece[,] newPalPiece = new Piece[2, 8];
   public int player = 0;
-  // Board du DamiersEcce.
-  private Board_Ecce Board_Ecce;
   /**** Action ****/
   Vector2 mouseOver;
   Vector2 startDrag;
@@ -41,9 +39,8 @@ public class Global : MonoBehaviour
    */
   public void Awake()
   {
-    Board_Ecce = GetComponentInChildren<Board_Ecce>();
     scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
-    scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
+//    scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
     this.GeneratePieces();
   }
 
@@ -64,11 +61,11 @@ public class Global : MonoBehaviour
   {
     if (Camera.main && Input.GetMouseButtonDown(0))
     {
-      bool physicsBoardEcce = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-         out RaycastHit hit, 25.0f, LayerMask.GetMask("Board_Ecce"));
+      bool physicsNPalBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+         out RaycastHit hit, 25.0f, LayerMask.GetMask("NPalBoard"));
       bool physicsBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
         out RaycastHit hit1, 50f, LayerMask.GetMask("Banch"));
-      if (physicsBoardEcce || physicsBanch)
+      if (physicsNPalBoard || physicsBanch)
       {
         // Saving mouseOver
         mouseOver.x = (int)hit.point.x;
@@ -112,7 +109,7 @@ public class Global : MonoBehaviour
               // Selecting another piece
               else
               {
-                DeselectPiece(selectedPiece, startDrag);
+                DeselectPiece(startDrag);
                 TrySelectPiece(mouseOver, player);
               }
             }
@@ -190,7 +187,7 @@ public class Global : MonoBehaviour
     CheckPieceEvolution(mouseOver, player);
     CheckOneUp(p, ToArrayCoordinates(mouseOver), player);
     FinishTurn();
-    DeselectPiece(selectedPiece, mouseOver);
+    DeselectPiece(mouseOver);
   }
 
 
@@ -208,15 +205,15 @@ public class Global : MonoBehaviour
         if (i % 2 == 0)
         {
           piece = GeneratePiece(whitePiecePrefab,
-            ToBoardCoordinates(new Vector2(-1, j * caseLength)));
-          pal = GeneratePiece(whitePalPrefab,
-            ToBoardCoordinates(new Vector2(-5, j * caseLength)));
+            ToBoardCoordinates(new Vector2(-3, j * caseLength)));
+         pal = GeneratePiece(whitePalPrefab,
+            ToBoardCoordinates(new Vector2(j * caseLength + 2, -10)));
         } else
         {
           piece = GeneratePiece(blackPiecePrefab,
-            ToBoardCoordinates(new Vector2(17, j * caseLength)));
+            ToBoardCoordinates(new Vector2(18, j * caseLength)));
           pal = GeneratePiece(blackPalPrefab,
-            ToBoardCoordinates(new Vector2(21, j * caseLength)));
+            ToBoardCoordinates(new Vector2(j * caseLength + 2, -12)));
         }
         newPiecesNotOnBoard[i, j] = piece;
         pal.isEcce = true;
@@ -232,7 +229,7 @@ public class Global : MonoBehaviour
   {
     GameObject go = Instantiate(piecePrefab) as GameObject;
     go.AddComponent<Piece>();
-    go.transform.SetParent(Board_Ecce.transform);
+    go.transform.SetParent(this.transform);
     Piece piece = go.GetComponent<Piece>();
     piece.transform.position =
       (Vector3.right * coordinate.x) +
@@ -260,7 +257,7 @@ public class Global : MonoBehaviour
     mouseOver = new Vector2();
   }
 
-  public void DeselectPiece(Piece piece, Vector2 startDrag)
+  public void DeselectPiece(Vector2 startDrag)
   {
     // Deselect the piece
     selectedPiece.GetComponent<MeshRenderer>().material = selectedPiece.myMaterials[0];
