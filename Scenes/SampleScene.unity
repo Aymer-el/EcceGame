@@ -147,7 +147,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297695755}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -4.1043954}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2141654038}
@@ -155,7 +155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 395.33508, y: 249.99988}
+  m_AnchoredPosition: {x: 395, y: 150}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &297695757
@@ -687,7 +687,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 345.33502, y: 249.99988}
+  m_AnchoredPosition: {x: 345, y: 150}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1928233574
@@ -1312,11 +1312,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   whitePiecePrefab: {fileID: 8906339362000841674, guid: 75f59010af02641aa969f3ee389a5cd3,
     type: 3}
-  blackPiecePrefab: {fileID: 326991671843021437, guid: a1fa9ef91ba5a498283b3bcd86455d48,
+  blackPiecePrefab: {fileID: 2087811990499394287, guid: 6b061fdfc914342e384ac6396b2c7fc6,
     type: 3}
-  whitePalPrefab: {fileID: 993720079779546464, guid: bfa1272f66a244fcda16fa252ace06bf,
+  whitePalPrefab: {fileID: 4616831136747957505, guid: e601688de1a0445658ca1d19bf5fb86a,
     type: 3}
-  blackPalPrefab: {fileID: 5410449196535727276, guid: 49660311a5fad4a76a1050525fc7c6e1,
+  blackPalPrefab: {fileID: 424178748109783473, guid: 339f901542d514e40b030ff4df54b4da,
     type: 3}
   scoreWhite: {fileID: 1928233574}
   scoreBlack: {fileID: 297695757}
