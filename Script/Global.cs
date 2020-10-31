@@ -3,7 +3,8 @@ using UnityEngine.UI;
 
 public class Global : MonoBehaviour
 {
-
+  public GameObject menu;
+  private bool isShowing;
   /**** Dependency ****/
   // Board or awaiting pieces to enter in game or that.
   public GameObject whitePiecePrefab;
@@ -28,10 +29,10 @@ public class Global : MonoBehaviour
   int scoreWhiteInt = 0;
   int scoreBlackInt = 0;
 
-  private readonly int caseLength = 2;
+  protected readonly int caseLength = 2;
 
   /**** View ****/
-  private Piece selectedPiece;
+  protected Piece selectedPiece;
 
   /*
    * Gather all components.
@@ -40,7 +41,7 @@ public class Global : MonoBehaviour
   public void Awake()
   {
     scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
-//    scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
+    scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
     this.GeneratePieces();
   }
 
@@ -117,6 +118,11 @@ public class Global : MonoBehaviour
         }
       }
     }
+    if (Input.GetKeyDown("escape"))
+    {
+      isShowing = !isShowing;
+      menu.SetActive(isShowing);
+    }
   }
 
   private Piece GetPiece(Vector2 position)
@@ -128,7 +134,7 @@ public class Global : MonoBehaviour
       ];
   }
 
-  private void TrySelectPiece(Vector2 mouseOver, int player)
+  protected void TrySelectPiece(Vector2 mouseOver, int player)
   {
     Piece piece = GetPiece(mouseOver);
     if (piece != null && IsPlayerPickingRightColorPiece(piece, player))
@@ -194,7 +200,7 @@ public class Global : MonoBehaviour
   /*
    * Set of board of Entries Generator for both types.
    */
-  private void GeneratePieces()
+  protected void GeneratePieces()
   {
     for (var i = 0; i < 2; i++)
     {

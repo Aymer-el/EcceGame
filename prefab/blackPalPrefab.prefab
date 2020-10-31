@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7324651114748982079}
   - component: {fileID: 8844055309211763769}
   - component: {fileID: 4347228017927111467}
+  - component: {fileID: 4753453598072742003}
   m_Layer: 0
   m_Name: BlackPalPrefab
   m_TagString: Untagged
@@ -81,6 +82,22 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &4753453598072742003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424178748109783473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c51e84b6b450549979bb8ad3b45bc128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEcce: 0
+  myMaterials:
+  - {fileID: 4874126678125670354, guid: e44ddb9fa599d44aaacff142b59e8c26, type: 3}
+  - {fileID: 2100000, guid: 4e6fa5ef38e374894a1d2fd315eddbe1, type: 2}
 --- !u!1 &632641925284041986
 GameObject:
   m_ObjectHideFlags: 0
