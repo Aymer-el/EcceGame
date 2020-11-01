@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class Global : MonoBehaviour
 {
-  public GameObject menu;
-  private bool isShowing;
   /**** Dependency ****/
   // Board or awaiting pieces to enter in game or that.
   public GameObject whitePiecePrefab;
@@ -60,7 +58,7 @@ public class Global : MonoBehaviour
    */
   private void UpdateMouseOver()
   {
-    if (Camera.main && Input.GetMouseButtonDown(0))
+    if (Camera.main && Input.GetMouseButtonDown(0) && !UI.isShowing)
     {
       bool physicsNPalBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
          out RaycastHit hit, 25.0f, LayerMask.GetMask("NPalBoard"));
@@ -117,11 +115,6 @@ public class Global : MonoBehaviour
           }
         }
       }
-    }
-    if (Input.GetKeyDown("escape"))
-    {
-      isShowing = !isShowing;
-      menu.SetActive(isShowing);
     }
   }
 
