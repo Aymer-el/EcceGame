@@ -10,6 +10,9 @@ public class Scenario : Global
   {
     scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
     scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
+    scoreBlack.gameObject.SetActive(false);
+    scoreWhite.gameObject.SetActive(false);
+    GameObject.Find("score").SetActive(false);
     this.GeneratePieces();
     this.InitialiseScenario();
   }
