@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +7,6 @@ public class UI : MonoBehaviour
 {
   public GameObject menu;
   public static bool isShowing = true;
-  public UnityEvent onClick;
   public GameObject ButtonShare;
   public GameObject ButtonPlay;
   public GameObject ButtonRules;
