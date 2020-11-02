@@ -20,8 +20,8 @@ public class Global : MonoBehaviour
   public Piece[,] newPalPiece = new Piece[2, 8];
   public int player = 0;
   /**** Action ****/
-  Vector2 mouseOver;
-  Vector2 startDrag;
+  protected Vector2 mouseOver;
+  protected Vector2 startDrag;
 
 
   int scoreWhiteInt = 0;
@@ -58,7 +58,7 @@ public class Global : MonoBehaviour
    */
   private void UpdateMouseOver()
   {
-    if (Camera.main && Input.GetMouseButtonDown(0) && !UI.isShowing)
+    if (Camera.main && Input.GetMouseButtonDown(0))
     {
       bool physicsNPalBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
          out RaycastHit hit, 25.0f, LayerMask.GetMask("NPalBoard"));
@@ -118,7 +118,7 @@ public class Global : MonoBehaviour
     }
   }
 
-  private Piece GetPiece(Vector2 position)
+  protected Piece GetPiece(Vector2 position)
   {
     // Getting the piece out of the array
     return pieces[
