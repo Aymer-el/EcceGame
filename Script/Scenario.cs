@@ -46,8 +46,23 @@ public class Scenario : Global
       for (var j = -2; j < 4; j+=2)
       {
         Vector2 boardCoordinate = new Vector2((i + piecePosition.x), (j + piecePosition.y));
-        if (selectedPiece != null && GetPiece(boardCoordinate) == null &&
-          GameLogic.IsMovePossible(piece.isEcce, true, ToBoardCoordinates(piecePosition), ToBoardCoordinates(boardCoordinate)))
+        Piece otherPiece = GetPiece(boardCoordinate);
+        bool isPossible = false;
+        // Move
+        if (selectedPiece != null && (otherPiece == null)
+          && GameLogic.IsMovePossible(piece.isEcce, true,
+          ToBoardCoordinates(piecePosition), ToBoardCoordinates(boardCoordinate)))
+        {
+          isPossible = true;
+        }
+        // Eat
+        if(otherPiece != null && GameLogic.IsMovePossible(
+          true, false, ToBoardCoordinates(piecePosition),
+          ToBoardCoordinates(boardCoordinate)))
+        {
+          isPossible = true;
+        }
+        if(isPossible)
         {
           tutorialCubes[count].transform.position =
             (Vector3.right * ToBoardCoordinates(boardCoordinate).x) +
