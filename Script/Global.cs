@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+public interface ISelect
+{
+  void TrySelectAPiece();
+}
+
 public class Global : MonoBehaviour
 {
   /**** Dependency ****/
@@ -121,13 +126,21 @@ public class Global : MonoBehaviour
   protected Piece GetPiece(Vector2 position)
   {
     // Getting the piece out of the array
-    return pieces[
-      (int)ToArrayCoordinates(position).x,
-      (int)ToArrayCoordinates(position).y
+    Vector2 coordinates = ToArrayCoordinates(position);
+    if(coordinates.x > 0 && coordinates.x < 8 && coordinates.y > 0 && coordinates.y < 8)
+    {
+      return pieces[
+      (int)coordinates.x,
+      (int)coordinates.y
       ];
+    } else
+    {
+      return null;
+    }
+    
   }
 
-  protected void TrySelectPiece(Vector2 mouseOver, int player)
+  public virtual void TrySelectPiece(Vector2 mouseOver, int player)
   {
     Piece piece = GetPiece(mouseOver);
     if (piece != null && IsPlayerPickingRightColorPiece(piece, player))
@@ -164,7 +177,7 @@ public class Global : MonoBehaviour
     );
   }
 
-  public void TryMovePiece(Piece p, Vector2 mouseOver, Vector2 startDrag)
+  public virtual void TryMovePiece(Piece p, Vector2 mouseOver, Vector2 startDrag)
   {
     // Moving piece
     p.transform.position =

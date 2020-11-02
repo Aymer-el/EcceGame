@@ -40,23 +40,33 @@ public class Scenario : Global
 
   private void PlaceCube(Piece piece, Vector2 piecePosition)
   {
-
     int count = 0;
     for (var i = -2; i < 4; i+=2)
     {
       for (var j = -2; j < 4; j+=2)
       {
-        Vector2 boardCoordinate = new Vector2((i + piecePosition.x) + 1, (j + piecePosition.y) + 1);
-        if (GetPiece(boardCoordinate) == null &&
+        Vector2 boardCoordinate = new Vector2((i + piecePosition.x), (j + piecePosition.y));
+        if (selectedPiece != null && GetPiece(boardCoordinate) == null &&
           GameLogic.IsMovePossible(piece.isEcce, true, ToBoardCoordinates(piecePosition), ToBoardCoordinates(boardCoordinate)))
         {
           tutorialCubes[count].transform.position =
-            (Vector3.right * boardCoordinate.x) +
-            (Vector3.forward * boardCoordinate.y) +
-            (Vector3.up * -0.5f);
+            (Vector3.right * ToBoardCoordinates(boardCoordinate).x) +
+            (Vector3.forward * ToBoardCoordinates(boardCoordinate).y) +
+            (Vector3.up * 0);
           count++;
         }
       }
+    }
+  }
+
+  private void RemoveCube()
+  {
+    for (int i = 0; i < 9; i++)
+    {
+      tutorialCubes[i].transform.position =
+            (Vector3.right * -10) +
+            (Vector3.forward * -10) +
+            (Vector3.up * 0);
     }
   }
 
@@ -68,28 +78,17 @@ public class Scenario : Global
     TryMovePiece(selectedPiece,
         new Vector2(5 * caseLength, 1 * caseLength),
         new Vector2(1 * caseLength, 1 * caseLength));
-    TrySelectPiece(new Vector2(12, 2), 1);
   }
 
-  protected new void TrySelectPiece(Vector2 mouseOver, int player)
+  public override void TrySelectPiece(Vector2 mouseOver, int player)
   {
-    Piece piece = GetPiece(mouseOver);
-    if (piece != null && IsPlayerPickingRightColorPiece(piece, player))
-    {
-      selectedPiece = piece;
-      startDrag = mouseOver;
-      // Showing selection
-      if (selectedPiece != null)
-      {
-        // Material selection
-        selectedPiece.GetComponent<MeshRenderer>().material = selectedPiece.myMaterials[1];
-        // Perspective selection
-        selectedPiece.gameObject.transform.position =
-          (Vector3.right * ToBoardCoordinates(mouseOver).x) +
-          (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
-          (Vector3.up * 1.1f);
-      }
-      PlaceCube(piece, new Vector2(12,2));
-    }
+    base.TrySelectPiece(mouseOver, player);
+    PlaceCube(selectedPiece, mouseOver);
+  }
+
+  public override void TryMovePiece(Piece p, Vector2 mouseOver, Vector2 startDrag)
+  {
+    base.TryMovePiece(p, mouseOver, startDrag);
+    RemoveCube();
   }
 }
