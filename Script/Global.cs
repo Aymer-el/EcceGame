@@ -72,6 +72,7 @@ public class Global : MonoBehaviour
       if (physicsNPalBoard || physicsBanch)
       {
         // Saving mouseOver
+        Debug.Log(ToArrayCoordinates(mouseOver));
         mouseOver.x = (int)hit.point.x;
         mouseOver.y = (int)hit.point.z;
         if (Input.GetMouseButtonDown(0))
