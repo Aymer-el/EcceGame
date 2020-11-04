@@ -3,9 +3,9 @@ standardMove[2]=    - bouge horizontallement et verticallement
 standardMove[3]=    - mange en diagonales
 standardMove[4]=Mettre un pion sur le plateau de jeu compte un tour.
 
-palMove[1]=Un pion PAL:
+palMove[1]=Un pion pal:
 palMove[2]=    - bouge et mange dans toute les directions. \n C'est à dire horizontalement, verticallement et en diagonal
-palMove[3]=    - Pour avoir un pion PAL il faut transformer un pion standard en le plaçant sur la case verte PAL.
+palMove[3]=    - Pour avoir un pion pal il faut transformer un pion standard en le plaçant sur la case verte pal.
 
 winner[0]= BLANC
 winner[1]= NOIR
