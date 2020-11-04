@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UIRule : MonoBehaviour
 {
@@ -35,6 +36,10 @@ public class UIRule : MonoBehaviour
     PlayStandardPiece(() => RefreshMenu(0));
     PlayerPalPiece(() => RefreshMenu(1));
     PlayerScore(() => RefreshMenu(2));
+    NewGame(() => {
+      Global.WinnerInt = -1;
+      SceneManager.LoadScene("NewGameScene");
+    });
   }
 
   void PlayStandardPiece(UnityAction action)
@@ -50,6 +55,11 @@ public class UIRule : MonoBehaviour
   void PlayerScore(UnityAction action)
   {
     CanvasMenu.GetComponentsInChildren<Button>()[2].onClick.AddListener(action);
+  }
+
+  void NewGame(UnityAction action)
+  {
+    CanvasMenu.GetComponentsInChildren<Button>()[3].onClick.AddListener(action);
   }
 
   void RefreshMenu(int index)
