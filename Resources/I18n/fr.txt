@@ -7,6 +7,9 @@ palMove[1]=Un pion pal:
 palMove[2]=    - bouge et mange dans toute les directions. \n C'est à dire horizontalement, verticallement et en diagonal
 palMove[3]=    - Pour avoir un pion pal il faut transformer un pion standard en le plaçant sur la case verte pal.
 
+score[1]=Pour marquer un point aller sur la case d'entrée de votre adversaire.
+score[2]=Le but du jeu est de marquer le plus de point possible.
+
 winner[0]= BLANC
 winner[1]= NOIR
 winner[2]= GAGNE

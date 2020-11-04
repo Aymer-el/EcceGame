@@ -8,8 +8,9 @@ public class UIRule : MonoBehaviour
   public GameObject CanvasMenu;
   public GameObject CanvasRulesStandardPiece;
   public GameObject CanvasRulesPalPiece;
+  public GameObject CanvasRulesScore;
 
-  public bool[] isShowingCanvas = new bool[2];
+  public bool[] isShowingCanvas = new bool[3];
 
   
   public void Start()
@@ -26,8 +27,14 @@ public class UIRule : MonoBehaviour
     CanvasRulesPalPiece.GetComponentInChildren<TMP_Text>().text =
       I18n.Fields["palMove[1]"] + '\n' +
     I18n.Fields["palMove[2]"] + '\n' + I18n.Fields["palMove[3]"];
+
+
+    CanvasRulesScore.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["score[1]"] + '\n' + I18n.Fields["score[2]"];
+
     PlayStandardPiece(() => RefreshMenu(0));
     PlayerPalPiece(() => RefreshMenu(1));
+    PlayerScore(() => RefreshMenu(2));
   }
 
   void PlayStandardPiece(UnityAction action)
@@ -38,6 +45,11 @@ public class UIRule : MonoBehaviour
   void PlayerPalPiece(UnityAction action)
   {
     CanvasMenu.GetComponentsInChildren<Button>()[1].onClick.AddListener(action);
+  }
+
+  void PlayerScore(UnityAction action)
+  {
+    CanvasMenu.GetComponentsInChildren<Button>()[2].onClick.AddListener(action);
   }
 
   void RefreshMenu(int index)
@@ -52,9 +64,9 @@ public class UIRule : MonoBehaviour
 
   private void Update()
   {
-    
     CanvasRulesStandardPiece.SetActive(isShowingCanvas[0]);
     CanvasRulesPalPiece.SetActive(isShowingCanvas[1]);
+    CanvasRulesScore.SetActive(isShowingCanvas[2]);
   }
 
 }

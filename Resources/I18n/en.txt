@@ -2,6 +2,9 @@ standardMove[1]=A standard piece:
 standardMove[2]=    - moves vertically and horizontally
 standardMove[3]=    - eats on the diagonales
 
+score[1]=Pour marquer un point aller sur la case d'entrée de votre adversaire.
+score[2]=Le but du jeu est de marquer le plus de point possible.
+
 winner[0]= WHITE
 winner[1]= BLACK
 winner[2]= WINS
