@@ -16,9 +16,6 @@ public class Scenario : Global
   {
     scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
     scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
-    scoreBlack.gameObject.SetActive(false);
-    scoreWhite.gameObject.SetActive(false);
-    GameObject.Find("score").SetActive(false);
     this.GeneratePieces();
     for (var i = 0; i < tutorialCubes.Length; i++)
     {
@@ -63,6 +60,7 @@ public class Scenario : Global
           {
             isPossible = true;
           }
+          // Ecce
           if(otherPiece &&
             !otherPiece.name.Contains(selectedPiece.name.Substring(0, 5)) && piece.isEcce)
           {

@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class UI : MonoBehaviour
 {
@@ -12,17 +13,21 @@ public class UI : MonoBehaviour
   public GameObject ButtonRules;
   public GameObject ButtonSound;
   public GameObject ButtonCredits;
+  public GameObject PanelWinner;
   // Start is called before the first frame update
 
 
   public void Awake()
   {
     menu.SetActive(isShowing);
-    NewGame(() => SceneManager.LoadScene("NewGameScene"));
+    PanelWinner.SetActive(false);
+    NewGame(() => {
+      Global.WinnerInt = -1;
+      SceneManager.LoadScene("NewGameScene");
+    });
     Rules(() => SceneManager.LoadScene("RulesScene"));
     Sound(() => GetComponent<AudioSource>().mute = !GetComponent<AudioSource>().mute);
   }
-
 
   void NewGame(UnityAction action)
   {
@@ -46,5 +51,11 @@ public class UI : MonoBehaviour
         isShowing = !isShowing;
         menu.SetActive(isShowing);
       }
-    }
+      if (Global.WinnerInt > -1)
+      {
+        PanelWinner.SetActive(true);
+        PanelWinner.GetComponentInChildren<TMP_Text>().text =
+        I18n.Fields["winner[" + Global.WinnerInt + "]"] + I18n.Fields["winner[2]"];
+      }
+  }
 }

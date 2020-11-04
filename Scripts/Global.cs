@@ -14,7 +14,6 @@ public class Global : MonoBehaviour
   public GameObject blackPiecePrefab;
   public GameObject whitePalPrefab;
   public GameObject blackPalPrefab;
-//  public GameObject[] scoreTexts = new GameObject[8];
   public Text scoreWhite;
   public Text scoreBlack;
 
@@ -23,14 +22,18 @@ public class Global : MonoBehaviour
   public Piece[,] pieces = new Piece[8, 8];
   public Piece[,] newPiecesNotOnBoard = new Piece[2, 8];
   public Piece[,] newPalPiece = new Piece[2, 8];
-  public int player = 0;
+  // Use to determine winner
+  public int countWhitePiecesOnBoard;
+  public int countBlackPiecesOnBoard;
+
   /**** Action ****/
+  public int player = 0;
   protected Vector2 mouseOver;
   protected Vector2 startDrag;
 
-
   int scoreWhiteInt = 0;
   int scoreBlackInt = 0;
+  public static int WinnerInt { get; set; } = -1;
 
   protected readonly int caseLength = 2;
 
@@ -56,6 +59,10 @@ public class Global : MonoBehaviour
     this.UpdateMouseOver();
     scoreWhite.text = scoreWhiteInt.ToString();
     scoreBlack.text = scoreBlackInt.ToString();
+    if(WinnerInt > -1)
+    {
+
+    }
   }
 
   /*
@@ -72,7 +79,6 @@ public class Global : MonoBehaviour
       if (physicsNPalBoard || physicsBanch)
       {
         // Saving mouseOver
-        Debug.Log(ToArrayCoordinates(mouseOver));
         mouseOver.x = (int)hit.point.x;
         mouseOver.y = (int)hit.point.z;
         if (Input.GetMouseButtonDown(0))
@@ -128,7 +134,7 @@ public class Global : MonoBehaviour
   {
     // Getting the piece out of the array
     Vector2 coordinates = ToArrayCoordinates(position);
-    if(coordinates.x > 0 && coordinates.x < 8 && coordinates.y > 0 && coordinates.y < 8)
+    if(coordinates.x >= 0 && coordinates.x < 8 && coordinates.y >= 0 && coordinates.y < 8)
     {
       return pieces[
       (int)coordinates.x,
@@ -201,6 +207,7 @@ public class Global : MonoBehaviour
     CheckOneUp(p, ToArrayCoordinates(mouseOver), player);
     FinishTurn();
     DeselectPiece(mouseOver);
+    DetermineWinner();
   }
 
 
@@ -253,7 +260,15 @@ public class Global : MonoBehaviour
 
   public void RemovingPiece(Vector2 mouseOver)
   {
-    pieces[(int)mouseOver.x, (int)mouseOver.y].gameObject.SetActive(false);
+    Piece p = pieces[(int)mouseOver.x, (int)mouseOver.y];
+    if (p.name.Contains("white"))
+    {
+      countWhitePiecesOnBoard--;
+    } else if (p.name.Contains("black"))
+    {
+      countBlackPiecesOnBoard--;
+    }
+    p.gameObject.SetActive(false);
     pieces[(int)mouseOver.x, (int)mouseOver.y] = null;
   }
 
@@ -286,6 +301,7 @@ public class Global : MonoBehaviour
     if (player == 0 && pieces[1, 1] == null)
     {
       selectedPiece = GetANewPiece(player);
+      countWhitePiecesOnBoard++;
       TryMovePiece(selectedPiece,
         new Vector2(1 * caseLength, 1 * caseLength),
         new Vector2(1 * caseLength, 1 * caseLength));
@@ -293,6 +309,7 @@ public class Global : MonoBehaviour
     if (player == 1 && pieces[6, 1] == null)
     {
       selectedPiece = GetANewPiece(player);
+      countBlackPiecesOnBoard++;
       TryMovePiece(selectedPiece,
         new Vector2(6 * caseLength, 1 * caseLength),
         new Vector2(6 * caseLength, 1 * caseLength));
@@ -344,7 +361,7 @@ public class Global : MonoBehaviour
     Vector2 arrayCoordinates = ToArrayCoordinates(mouseOver);
     Vector2 boardCoordinates = ToBoardCoordinates(mouseOver);
     Piece piece = GetPiece(mouseOver);
-    if (!piece.isEcce)
+    if (piece != null && !piece.isEcce)
     {
       if (arrayCoordinates.x == 1 && arrayCoordinates.y == 6
         && player == 0
@@ -389,7 +406,7 @@ public class Global : MonoBehaviour
            piece.name.Contains("black") && player == 1;
   }
 
-  public int NumberOfANewPiece(int player)
+  public int NumberOfNewPieces(int player)
   {
     var i = 0;
     var found = false;
@@ -407,7 +424,35 @@ public class Global : MonoBehaviour
     return newPiecesNotOnBoard.Length/2 - (i +1);
   }
 
+  public int NumberOfPiecesOnBoard(int player)
+  {
+    var i = 0;
+    var found = false;
+    while (i < 7 && !found)
+    {
+      if (pieces[player, i] != null)
+      {
+        found = true;
+      }
+      else
+      {
+        i++;
+      }
+    }
+    return pieces.Length / 2 - (i + 1);
+  }
 
-  /** When First Piece is moved, regenerate one **/
+
+  protected void DetermineWinner()
+  {
+    if (scoreWhiteInt > NumberOfNewPieces(1) + countBlackPiecesOnBoard + scoreBlackInt)
+    {
+      Global.WinnerInt = 0;
+    }
+    if(scoreBlackInt > NumberOfNewPieces(0) + countWhitePiecesOnBoard + scoreWhiteInt)
+    {
+      Global.WinnerInt = 1;
+    }
+  }
 
 }
