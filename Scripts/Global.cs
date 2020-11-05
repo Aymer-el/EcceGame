@@ -104,7 +104,7 @@ public class Global : MonoBehaviour
               if (GameLogic.IsMovePossible(true, selectedPiece.isEcce,
                 ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
               {
-                RemovingPiece(ToArrayCoordinates(mouseOver));
+                RemovingPiece(ToArrayCoordinates(mouseOver), true);
                 TryMovePiece(selectedPiece, mouseOver, startDrag);
               }
             }
@@ -258,15 +258,15 @@ public class Global : MonoBehaviour
     return piece;
   }
 
-  public void RemovingPiece(Vector2 mouseOver)
+  public void RemovingPiece(Vector2 mouseOver, bool countMinus)
   {
     Piece p = pieces[(int)mouseOver.x, (int)mouseOver.y];
     if (p.name.Contains("white"))
     {
-      countWhitePiecesOnBoard--;
+      if(countMinus) countWhitePiecesOnBoard--;
     } else if (p.name.Contains("black"))
     {
-      countBlackPiecesOnBoard--;
+      if(countMinus) countBlackPiecesOnBoard--;
     }
     p.gameObject.SetActive(false);
     pieces[(int)mouseOver.x, (int)mouseOver.y] = null;
@@ -371,7 +371,7 @@ public class Global : MonoBehaviour
         )
       {
         Piece pal = GetANewPalPiece(player);
-        RemovingPiece(arrayCoordinates);
+        RemovingPiece(arrayCoordinates, false);
         pieces[(int)arrayCoordinates.x, (int)arrayCoordinates.y] = pal;
         pal.transform.position =
         (Vector3.right * boardCoordinates.x) +
@@ -395,7 +395,7 @@ public class Global : MonoBehaviour
       {
         scoreBlackInt++;
       }
-      RemovingPiece(mouseOver);
+      RemovingPiece(mouseOver, true);
     }
   }
 
@@ -445,11 +445,10 @@ public class Global : MonoBehaviour
 
   protected void DetermineWinner()
   {
-    if (scoreWhiteInt > NumberOfNewPieces(1) + countBlackPiecesOnBoard + scoreBlackInt)
-    {
+    if (scoreWhiteInt >= NumberOfNewPieces(1) + countBlackPiecesOnBoard + scoreBlackInt) {
       Global.WinnerInt = 0;
     }
-    if(scoreBlackInt > NumberOfNewPieces(0) + countWhitePiecesOnBoard + scoreWhiteInt)
+    if(scoreBlackInt >= NumberOfNewPieces(0) + countWhitePiecesOnBoard + scoreWhiteInt)
     {
       Global.WinnerInt = 1;
     }

@@ -54,7 +54,8 @@ public class Scenario : Global
             isPossible = true;
           }
           // Eat
-          if (otherPiece != null && GameLogic.IsMovePossible(
+          if (otherPiece != null && !otherPiece.name.Contains(selectedPiece.name.Substring(0, 5))
+            && GameLogic.IsMovePossible(
             true, false, ToBoardCoordinates(piecePosition),
             ToBoardCoordinates(boardCoordinate)))
           {
@@ -97,14 +98,43 @@ public class Scenario : Global
   {
     TryPlaceNewPiece(0);
     TryPlaceNewPiece(1);
-    TrySelectPiece(new Vector2(2, 2), 0);
+    TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
     TryMovePiece(selectedPiece,
-      new Vector2(5 * caseLength, 1 * caseLength),
+      new Vector2(1 * caseLength, 6 * caseLength),
+      new Vector2(1 * caseLength, 1 * caseLength));
+    TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
+    TryMovePiece(selectedPiece,
+      new Vector2(3 * caseLength, 2 * caseLength),
+      new Vector2(6 * caseLength, 1 * caseLength));
+    TrySelectPiece(new Vector2(1 * caseLength, 6 * caseLength), 0);
+    TryMovePiece(selectedPiece,
+      new Vector2(1 * caseLength, 5 * caseLength),
+      new Vector2(1 * caseLength, 6 * caseLength));
+    TryPlaceNewPiece(1);
+    TryPlaceNewPiece(0);
+    TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
+    TryMovePiece(selectedPiece,
+      new Vector2(4 * caseLength, 1 * caseLength),
+      new Vector2(6 * caseLength, 1 * caseLength));
+    TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
+    TryMovePiece(selectedPiece,
+      new Vector2(4 * caseLength, 4 * caseLength),
+      new Vector2(1 * caseLength, 1 * caseLength));
+    TryPlaceNewPiece(1);
+    TryPlaceNewPiece(0);
+    TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
+    TryMovePiece(selectedPiece,
+      new Vector2(3 * caseLength, 0 * caseLength),
+      new Vector2(6 * caseLength, 1 * caseLength));
+    TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
+    TryMovePiece(selectedPiece,
+      new Vector2(1 * caseLength, 1 * caseLength),
       new Vector2(1 * caseLength, 1 * caseLength));
   }
 
   public override void TrySelectPiece(Vector2 mouseOver, int player)
   {
+    RemoveCube();
     base.TrySelectPiece(mouseOver, player);
     PlaceCube(selectedPiece, mouseOver);
   }

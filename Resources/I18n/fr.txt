@@ -13,3 +13,15 @@ score[2]=Le but du jeu est de marquer le plus de point possible.
 winner[0]= BLANC
 winner[1]= NOIR
 winner[2]= GAGNE
+
+
+menuStandartPiece= Pion Standard
+menuPalPiece= Pion Pal
+menuScore = Score
+menuExit = Sortir
+
+menuShare = Partager
+menuNewGame = Nouvelle Partie
+menuRules = Règles
+menuSound = Son
+menuCredits = Crédits
