@@ -22,6 +22,7 @@ public class Scenario : Global
       tutorialCubes[i] = GenerateCube(tutorialCubePrefab);
     }
     this.InitialiseScenario();
+
   }
 
   /**

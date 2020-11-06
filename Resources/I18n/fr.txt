@@ -17,11 +17,13 @@ winner[2]= GAGNE
 
 menuStandartPiece= Pion Standard
 menuPalPiece= Pion Pal
-menuScore = Score
-menuExit = Sortir
+menuScore= Score
+menuExit= Sortir
 
-menuShare = Partager
-menuNewGame = Nouvelle Partie
-menuRules = Règles
-menuSound = Son
-menuCredits = Crédits
+menuToggle=MENU
+menuShare=PARTAGER
+menuNewGame=NOUVELLE PARTIE
+menuRules=REGLES
+menuSound=SON
+menuCredits=CREDITS
+

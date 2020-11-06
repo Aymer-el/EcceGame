@@ -17,11 +17,12 @@ winner[2]= GAGNE
 
 menuStandartPiece= Standard Piece
 menuPalPiece= Pal Piece
-menuScore = Score
-menuExit = Exit
+menuScore= Score
+menuExit= Exit
 
-menuShare = Share
-menuNewGame = New Game
-menuRules = Rules
-menuSound = Sounds
-menuCredits = Credits
+menuToggle=MENU
+menuShare= Share
+menuNewGame= New Game
+menuRules= Rules
+menuSound= Sounds
+menuCredits= Credits

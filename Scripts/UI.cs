@@ -8,8 +8,9 @@ public class UI : MonoBehaviour
 {
   public GameObject menu;
   public static bool isShowing = true;
+  public GameObject ButtonToggle;
   public GameObject ButtonShare;
-  public GameObject ButtonPlay;
+  public GameObject ButtonNewGame;
   public GameObject ButtonRules;
   public GameObject ButtonSound;
   public GameObject ButtonCredits;
@@ -27,11 +28,27 @@ public class UI : MonoBehaviour
     });
     Rules(() => SceneManager.LoadScene("RulesScene"));
     Sound(() => GetComponent<AudioSource>().mute = !GetComponent<AudioSource>().mute);
+    ToggleMenu(() => {
+      isShowing = !isShowing;
+      menu.SetActive(isShowing);
+    });
+    ButtonShare.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuShare"];
+    ButtonNewGame.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuNewGame"];
+    ButtonRules.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuRules"];
+    ButtonSound.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuSound"];
+    ButtonCredits.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuCredits"];
+    ButtonToggle.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuToggle"];
   }
 
   void NewGame(UnityAction action)
   {
-    ButtonPlay.GetComponentInChildren<Button>().onClick.AddListener(action);
+    ButtonNewGame.GetComponentInChildren<Button>().onClick.AddListener(action);
   }
 
   void Rules(UnityAction action)
@@ -43,14 +60,15 @@ public class UI : MonoBehaviour
   {
     ButtonSound.GetComponentInChildren<Button>().onClick.AddListener(action);
   }
+
+  void ToggleMenu(UnityAction action)
+  {
+    ButtonToggle.GetComponentInChildren<Button>().onClick.AddListener(action);
+  }
+
   // Update is called once per frame
   private void Update()
     {
-      if (Input.GetKeyDown("escape"))
-      {
-        isShowing = !isShowing;
-        menu.SetActive(isShowing);
-      }
       if (Global.WinnerInt > -1)
       {
         PanelWinner.SetActive(true);

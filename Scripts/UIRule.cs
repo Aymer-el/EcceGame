@@ -10,6 +10,10 @@ public class UIRule : MonoBehaviour
   public GameObject CanvasRulesStandardPiece;
   public GameObject CanvasRulesPalPiece;
   public GameObject CanvasRulesScore;
+  public GameObject ButtonMenuStandard;
+  public GameObject ButtonMenuPal;
+  public GameObject ButtonMenuScore;
+  public GameObject ButtonMenuExit;
 
   public bool[] isShowingCanvas = new bool[3];
 
@@ -20,6 +24,15 @@ public class UIRule : MonoBehaviour
 
   public void Awake()
   {
+    ButtonMenuStandard.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuStandartPiece"];
+    ButtonMenuPal.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuPalPiece"];
+    /*ButtonMenuScore.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuScore"];*/
+    ButtonMenuExit.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuExit"];
+
     CanvasRulesStandardPiece.GetComponentInChildren<TMP_Text>().text =
       I18n.Fields["standardMove[1]"] + '\n' +
     I18n.Fields["standardMove[2]"] + '\n' + I18n.Fields["standardMove[3]"]
