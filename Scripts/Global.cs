@@ -12,8 +12,8 @@ public class Global : MonoBehaviour
   // Board or awaiting pieces to enter in game or that.
   public GameObject whitePiecePrefab;
   public GameObject blackPiecePrefab;
-  public GameObject whitePalPrefab;
-  public GameObject blackPalPrefab;
+  public GameObject whiteEccePrefab;
+  public GameObject blackEccePrefab;
   public Text scoreWhite;
   public Text scoreBlack;
 
@@ -25,7 +25,7 @@ public class Global : MonoBehaviour
   // Unique set of Pieces.
   public Piece[,] pieces = new Piece[8, 8];
   public Piece[,] newPiecesNotOnBoard = new Piece[2, 8];
-  public Piece[,] newPalPiece = new Piece[2, 8];
+  public Piece[,] newEccePiece = new Piece[2, 8];
   // Use to determine winner
   public int countWhitePiecesOnBoard;
   public int countBlackPiecesOnBoard;
@@ -76,11 +76,11 @@ public class Global : MonoBehaviour
   {
     if (Camera.main && Input.GetMouseButtonDown(0) && !Global.IsUIShown)
     {
-      bool physicsNPalBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-         out RaycastHit hit, 25.0f, LayerMask.GetMask("NPalBoard"));
+      bool physicsEcceBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+         out RaycastHit hit, 25.0f, LayerMask.GetMask("EcceBoard"));
       bool physicsBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
         out RaycastHit hit1, 50f, LayerMask.GetMask("Banch"));
-      if (physicsNPalBoard || physicsBanch)
+      if (physicsEcceBoard || physicsBanch)
       {
         // Saving mouseOver
         mouseOver.x = (int)hit.point.x;
@@ -225,23 +225,23 @@ public class Global : MonoBehaviour
       for (var j = 0; j < 7; j++)
       {
         Piece piece;
-        Piece pal;
+        Piece Ecce;
         if (i % 2 == 0)
         {
           piece = GeneratePiece(whitePiecePrefab,
             ToBoardCoordinates(new Vector2(-3, j * caseLength)));
-         pal = GeneratePiece(whitePalPrefab,
+         Ecce = GeneratePiece(whiteEccePrefab,
             ToBoardCoordinates(new Vector2(j * caseLength + 2, -10)));
         } else
         {
           piece = GeneratePiece(blackPiecePrefab,
             ToBoardCoordinates(new Vector2(18, j * caseLength)));
-          pal = GeneratePiece(blackPalPrefab,
+          Ecce = GeneratePiece(blackEccePrefab,
             ToBoardCoordinates(new Vector2(j * caseLength + 2, -12)));
         }
         newPiecesNotOnBoard[i, j] = piece;
-        pal.isEcce = true;
-        newPalPiece[i, j] = pal;
+        Ecce.isEcce = true;
+        newEccePiece[i, j] = Ecce;
       }
     }
   }
@@ -340,13 +340,13 @@ public class Global : MonoBehaviour
     return piece;
   }
 
-  private Piece GetANewPalPiece(int player)
+  private Piece GetANewEccePiece(int player)
   {
     var i = 0;
     var found = false;
     while (i <= 7 && !found)
     {
-      if (newPalPiece[player, i] != null)
+      if (newEccePiece[player, i] != null)
       {
         found = true;
       }
@@ -355,8 +355,8 @@ public class Global : MonoBehaviour
         i++;
       }
     }
-    Piece piece = newPalPiece[player, i];
-    newPalPiece[player, i] = null;
+    Piece piece = newEccePiece[player, i];
+    newEccePiece[player, i] = null;
     return piece;
   }
 
@@ -374,10 +374,10 @@ public class Global : MonoBehaviour
          && player == 1
         )
       {
-        Piece pal = GetANewPalPiece(player);
+        Piece Ecce = GetANewEccePiece(player);
         RemovingPiece(arrayCoordinates, false);
-        pieces[(int)arrayCoordinates.x, (int)arrayCoordinates.y] = pal;
-        pal.transform.position =
+        pieces[(int)arrayCoordinates.x, (int)arrayCoordinates.y] = Ecce;
+        Ecce.transform.position =
         (Vector3.right * boardCoordinates.x) +
         (Vector3.forward * boardCoordinates.y) +
         (Vector3.up * 1);
