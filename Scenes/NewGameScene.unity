@@ -3481,9 +3481,9 @@ MonoBehaviour:
     type: 3}
   blackPiecePrefab: {fileID: 2087811990499394287, guid: 6b061fdfc914342e384ac6396b2c7fc6,
     type: 3}
-  whitePalPrefab: {fileID: 4616831136747957505, guid: e601688de1a0445658ca1d19bf5fb86a,
+  whitePalPrefab: {fileID: 7533871651603548969, guid: 2aa924045cb3a4ceaae97989b9224281,
     type: 3}
-  blackPalPrefab: {fileID: 424178748109783473, guid: 339f901542d514e40b030ff4df54b4da,
+  blackPalPrefab: {fileID: 8347559044697993374, guid: 9147cdc0b30624b49943a99fd0a12048,
     type: 3}
   scoreWhite: {fileID: 1928233574}
   scoreBlack: {fileID: 297695757}
