@@ -31,6 +31,7 @@ public class UI : MonoBehaviour
     ToggleMenu(() => {
       isShowing = !isShowing;
       menu.SetActive(isShowing);
+      Global.IsUIShown = isShowing;
     });
     ButtonShare.GetComponentInChildren<TMP_Text>().text =
       I18n.Fields["menuShare"];

@@ -6,10 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class UIRule : MonoBehaviour
 {
+  public bool isShowing = true;
   public GameObject CanvasMenu;
+  public GameObject PanelMenu;
   public GameObject CanvasRulesStandardPiece;
   public GameObject CanvasRulesPalPiece;
   public GameObject CanvasRulesScore;
+  public GameObject ButtonToggle;
   public GameObject ButtonMenuStandard;
   public GameObject ButtonMenuPal;
   public GameObject ButtonMenuScore;
@@ -53,6 +56,11 @@ public class UIRule : MonoBehaviour
       Global.WinnerInt = -1;
       SceneManager.LoadScene("NewGameScene");
     });
+    ToggleMenu(() => {
+      isShowing = !isShowing;
+      PanelMenu.SetActive(isShowing);
+      Global.IsUIShown = isShowing;
+    });
   }
 
   void PlayStandardPiece(UnityAction action)
@@ -75,6 +83,11 @@ public class UIRule : MonoBehaviour
     CanvasMenu.GetComponentsInChildren<Button>()[3].onClick.AddListener(action);
   }
 
+  void ToggleMenu(UnityAction action)
+  {
+    ButtonToggle.GetComponentInChildren<Button>().onClick.AddListener(action);
+  }
+
   void RefreshMenu(int index)
   {
     for (var i = 0; i < isShowingCanvas.Length; i++)
@@ -84,7 +97,7 @@ public class UIRule : MonoBehaviour
     isShowingCanvas[index] = !isShowingCanvas[index];
   }
 
-
+  // Update is called once per frame
   private void Update()
   {
     CanvasRulesStandardPiece.SetActive(isShowingCanvas[0]);

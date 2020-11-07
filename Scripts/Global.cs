@@ -17,6 +17,10 @@ public class Global : MonoBehaviour
   public Text scoreWhite;
   public Text scoreBlack;
 
+
+  static bool isUIShown = false;
+  public static bool IsUIShown { get => isUIShown; set => isUIShown = value; }
+
   /**** Relative to Game Object and View ****/
   // Unique set of Pieces.
   public Piece[,] pieces = new Piece[8, 8];
@@ -70,7 +74,7 @@ public class Global : MonoBehaviour
    */
   private void UpdateMouseOver()
   {
-    if (Camera.main && Input.GetMouseButtonDown(0))
+    if (Camera.main && Input.GetMouseButtonDown(0) && !Global.IsUIShown)
     {
       bool physicsNPalBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
          out RaycastHit hit, 25.0f, LayerMask.GetMask("NPalBoard"));
