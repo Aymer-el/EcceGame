@@ -78,9 +78,11 @@ public class Global : MonoBehaviour
     {
       bool physicsEcceBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
          out RaycastHit hit, 25.0f, LayerMask.GetMask("EcceBoard"));
-      bool physicsBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-        out RaycastHit hit1, 50f, LayerMask.GetMask("Banch"));
-      if (physicsEcceBoard || physicsBanch)
+      bool physicsWhiteBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+        out RaycastHit hit1, 50f, LayerMask.GetMask("WhiteBanch"));
+      bool physicsBlackBanch = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+        out RaycastHit hit2, 50f, LayerMask.GetMask("BlackBanch"));
+      if (physicsEcceBoard || physicsWhiteBanch || physicsBlackBanch)
       {
         // Saving mouseOver
         mouseOver.x = (int)hit.point.x;
@@ -90,9 +92,15 @@ public class Global : MonoBehaviour
           if (selectedPiece == null)
           {
             // Selecting a new piece
-            if (physicsBanch)
+            if (physicsWhiteBanch || physicsBlackBanch)
             {
-              TryPlaceNewPiece(player);
+              if(physicsWhiteBanch && player == 0)
+              {
+                TryPlaceNewPiece(player);
+              } else if(physicsBlackBanch && player == 1)
+              {
+                TryPlaceNewPiece(player);
+              }
             } else
             // Selecting a piece
             {
