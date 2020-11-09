@@ -20,10 +20,7 @@ public class UIRule : MonoBehaviour
 
   public bool[] isShowingCanvas = new bool[3];
 
-  
-  public void Start()
-  {
-  }
+ 
 
   public void Awake()
   {
@@ -31,23 +28,17 @@ public class UIRule : MonoBehaviour
       I18n.Fields["menuStandartPiece"];
     ButtonMenuPal.GetComponentInChildren<TMP_Text>().text =
       I18n.Fields["menuPalPiece"];
-    /*ButtonMenuScore.GetComponentInChildren<TMP_Text>().text =
-      I18n.Fields["menuScore"];*/
     ButtonMenuExit.GetComponentInChildren<TMP_Text>().text =
       I18n.Fields["menuExit"];
 
     CanvasRulesStandardPiece.GetComponentInChildren<TMP_Text>().text =
-      I18n.Fields["standardMove[1]"] + '\n' +
-    I18n.Fields["standardMove[2]"] + '\n' + I18n.Fields["standardMove[3]"]
-    + '\n' + I18n.Fields["standardMove[4]"];
-
+      I18n.Fields["standardMove[1]"];
     CanvasRulesPalPiece.GetComponentInChildren<TMP_Text>().text =
-      I18n.Fields["palMove[1]"] + '\n' +
-    I18n.Fields["palMove[2]"] + '\n' + I18n.Fields["palMove[3]"];
-
+      I18n.Fields["ecceMove[1]"];
 
     CanvasRulesScore.GetComponentInChildren<TMP_Text>().text =
-      I18n.Fields["score[1]"] + '\n' + I18n.Fields["score[2]"];
+      I18n.Fields["score[1]"];
+   
 
     PlayStandardPiece(() => RefreshMenu(0));
     PlayerPalPiece(() => RefreshMenu(1));

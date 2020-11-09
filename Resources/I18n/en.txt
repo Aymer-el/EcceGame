@@ -1,19 +1,10 @@
-standardMove[1]=A standard piece:
-standardMove[2]=    - moves vertically and horizontally
-standardMove[3]=    - eats on the diagonales
-
-score[1]=Pour marquer un point aller sur la case d'entrée de votre adversaire.
-score[2]=Le but du jeu est de marquer le plus de point possible.
+standardMove[1]=Pawns <b>MOVES LATERAL</b> and <b>EATS on the DIGONALES</b> like in chess.
+ecceMove[1]=Ecce piece <b>MOVES and EATS LATERALS and on the DIAGONALES</b>, like the king in chess. Place a normal pawn on your ECCE case to <b>upgrade</b>.
+score[1]=To mark points place a piece <b>on the entry case of your adversary</b>.
 
 winner[0]= WHITE
 winner[1]= BLACK
 winner[2]= WINS
-
-winner[0]= BLANC
-winner[1]= NOIR
-winner[2]= GAGNE
-
-
 
 menuStandartPiece= Standard Piece
 menuPalPiece= Pal Piece
@@ -21,8 +12,8 @@ menuScore= Score
 menuExit= Exit
 
 menuToggle=MENU
-menuShare= Share
-menuNewGame= New Game
-menuRules= Rules
-menuSound= Sounds
-menuCredits= Credits
+menuShare=SHARE
+menuNewGame=NEW GAME
+menuRules=RULES
+menuSound=SOUND
+menuCredits=CRE-DITS
