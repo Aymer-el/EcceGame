@@ -5,7 +5,7 @@ public static class GameLogic
 {
     public static bool IsMovePossible(bool CanGoDiagonal, bool CanGoHorizontal, Vector2 origin, Vector2 move) {
     if(move.x >=0 && origin.x >= 0 && move.y >= 0 && move.y >= 0
-      && move.x <= 8*2 && origin.x <= 8*2 && move.y <= 8*2 && move.y <= 8*2) {
+      && move.x <= 8*2 && origin.x <= 8*2 && move.y <= 6*2 && move.y <= 6*2) {
       if (!CanGoDiagonal)
       {
         // Standard piece move

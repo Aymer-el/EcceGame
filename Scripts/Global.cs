@@ -23,7 +23,7 @@ public class Global : MonoBehaviour
 
   /**** Relative to Game Object and View ****/
   // Unique set of Pieces.
-  public Piece[,] pieces = new Piece[8, 8];
+  public Piece[,] pieces = new Piece[8, 6];
   public Piece[,] newPiecesNotOnBoard = new Piece[2, 8];
   public Piece[,] newEccePiece = new Piece[2, 8];
   // Use to determine winner
@@ -146,7 +146,7 @@ public class Global : MonoBehaviour
   {
     // Getting the piece out of the array
     Vector2 coordinates = ToArrayCoordinates(position);
-    if(coordinates.x >= 0 && coordinates.x < 8 && coordinates.y >= 0 && coordinates.y < 8)
+    if(coordinates.x >= 0 && coordinates.x < 8 && coordinates.y >= 0 && coordinates.y < 6)
     {
       return pieces[
       (int)coordinates.x,
@@ -375,10 +375,10 @@ public class Global : MonoBehaviour
     Piece piece = GetPiece(mouseOver);
     if (piece != null && !piece.isEcce)
     {
-      if (arrayCoordinates.x == 1 && arrayCoordinates.y == 6
+      if (arrayCoordinates.x == 1 && arrayCoordinates.y == 4
         && player == 0
         ||
-         arrayCoordinates.x == 6 && arrayCoordinates.y == 6
+         arrayCoordinates.x == 6 && arrayCoordinates.y == 4
          && player == 1
         )
       {

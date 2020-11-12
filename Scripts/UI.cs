@@ -30,7 +30,14 @@ public class UI : MonoBehaviour
     Sound(() => GetComponent<AudioSource>().mute = !GetComponent<AudioSource>().mute);
     ToggleMenu(() => {
       isShowing = !isShowing;
-      menu.SetActive(isShowing);
+      if (!isShowing)
+      {
+        ButtonToggle.GetComponent<Image>().color = new Color32(87, 153, 99, 255);
+      }
+      else
+      {
+        ButtonToggle.GetComponent<Image>().color = new Color32(27, 183, 46, 255);
+      }
       Global.IsUIShown = isShowing;
     });
     ButtonShare.GetComponentInChildren<TMP_Text>().text =
@@ -76,5 +83,6 @@ public class UI : MonoBehaviour
         PanelWinner.GetComponentInChildren<TMP_Text>().text =
         I18n.Fields["winner[" + Global.WinnerInt + "]"] + I18n.Fields["winner[2]"];
       }
+     menu.SetActive(isShowing);
   }
 }
