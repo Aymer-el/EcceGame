@@ -43,7 +43,6 @@ public class UIRule : MonoBehaviour
     PlayerScore(() => RefreshMenu(2));
     ToggleMenu(() => {
       isShowing = !isShowing;
-      UI.isShowing = false;
       if (!isShowing)
       {
         ButtonToggle.GetComponent<Image>().color = new Color32(87, 153, 99, 255);
@@ -51,7 +50,6 @@ public class UIRule : MonoBehaviour
       {
         ButtonToggle.GetComponent<Image>().color = new Color32(27, 183, 46, 255);
       }
-
       PanelMenu.SetActive(isShowing);
       Global.IsUIShown = isShowing;
     });
