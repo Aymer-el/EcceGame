@@ -1350,7 +1350,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529315914}
   m_LocalRotation: {x: 0.5735764, y: -0.000000014901161, z: -0.000000009313226, w: 0.8191521}
-  m_LocalPosition: {x: 8.400001, y: 17.599998, z: 1.5}
+  m_LocalPosition: {x: 8.400001, y: 16.7, z: 0.1}
   m_LocalScale: {x: 1, y: 0.65759, z: 0.0597995}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1380,7 +1380,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 540969269}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -21, y: 0, z: -37.5}
+  m_LocalPosition: {x: -21, y: 0, z: -42}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 1795955629}
@@ -3998,7 +3998,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1751505779}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0b9fce148ae674e96972e9af87bdd2b0, type: 3}
@@ -5515,9 +5515,9 @@ MonoBehaviour:
     type: 3}
   blackPiecePrefab: {fileID: 2087811990499394287, guid: 6b061fdfc914342e384ac6396b2c7fc6,
     type: 3}
-  whiteEccePrefab: {fileID: 7533871651603548969, guid: 2aa924045cb3a4ceaae97989b9224281,
+  whiteEccePrefab: {fileID: 8751195416731776875, guid: 415483741829b4914a60b440bd120f1e,
     type: 3}
-  blackEccePrefab: {fileID: 8347559044697993374, guid: 9147cdc0b30624b49943a99fd0a12048,
+  blackEccePrefab: {fileID: 5417066307403346656, guid: 2369a181edf6c484e83d16d7c884877d,
     type: 3}
   scoreWhite: {fileID: 136674857}
   scoreBlack: {fileID: 231152544}
