@@ -7,7 +7,7 @@ using TMPro;
 public class UI : MonoBehaviour
 {
   public GameObject menu;
-  public static bool isShowing = true;
+  public static bool isShowing = false;
   public GameObject ButtonToggle;
   public GameObject ButtonShare;
   public GameObject ButtonNewGame;
@@ -26,7 +26,10 @@ public class UI : MonoBehaviour
       Global.WinnerInt = -1;
       SceneManager.LoadScene("NewGameScene");
     });
-    Rules(() => SceneManager.LoadScene("RulesScene"));
+    Rules(() => {
+        SceneManager.LoadScene("RulesScene");
+        isShowing = false;
+    });
     Sound(() => GetComponent<AudioSource>().mute = !GetComponent<AudioSource>().mute);
     ToggleMenu(() => {
       isShowing = !isShowing;

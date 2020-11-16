@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class UIRule : MonoBehaviour
 {
-  public bool isShowing = true;
+  public bool isShowing = false;
   public GameObject CanvasMenu;
   public GameObject PanelMenu;
   public GameObject PanelRulesPawns;
@@ -17,7 +17,6 @@ public class UIRule : MonoBehaviour
   public GameObject ButtonMenuPal;
   public GameObject ButtonMenuScore;
   public bool IsUiOn = true;
-
   public bool[] isShowingCanvas = new bool[3];
 
  
@@ -87,9 +86,17 @@ public class UIRule : MonoBehaviour
   // Update is called once per frame
   private void Update()
   {
-    PanelRulesPawns.SetActive(isShowingCanvas[0]);
-    PanelRulesEcces.SetActive(isShowingCanvas[1]);
-    PanelRulesScore.SetActive(isShowingCanvas[2]);
+    if (isShowing)
+    {
+        PanelRulesPawns.SetActive(isShowingCanvas[0]);
+        PanelRulesEcces.SetActive(isShowingCanvas[1]);
+        PanelRulesScore.SetActive(isShowingCanvas[2]);
+    } else
+        {
+            PanelRulesPawns.SetActive(false);
+            PanelRulesEcces.SetActive(false);
+            PanelRulesScore.SetActive(false);
+        }
   }
 
 }
