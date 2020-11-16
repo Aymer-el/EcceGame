@@ -15,10 +15,11 @@ public class UI : MonoBehaviour
   public GameObject ButtonSound;
   public GameObject ButtonCredits;
   public GameObject PanelWinner;
-  // Start is called before the first frame update
+  public GameObject PanelCredits;
+    // Start is called before the first frame update
+    public bool[] isShowingCanvas = new bool[1];
 
-
-  public void Awake()
+    public void Awake()
   {
     menu.SetActive(isShowing);
     PanelWinner.SetActive(false);
@@ -30,7 +31,10 @@ public class UI : MonoBehaviour
         SceneManager.LoadScene("RulesScene");
         isShowing = false;
     });
-    Sound(() => GetComponent<AudioSource>().mute = !GetComponent<AudioSource>().mute);
+    Credits(() => {
+        isShowingCanvas[0] = !isShowingCanvas[0];
+    });
+        Sound(() => GetComponent<AudioSource>().mute = !GetComponent<AudioSource>().mute);
     ToggleMenu(() => {
       isShowing = !isShowing;
       if (!isShowing)
@@ -72,7 +76,13 @@ public class UI : MonoBehaviour
     ButtonSound.GetComponentInChildren<Button>().onClick.AddListener(action);
   }
 
-  void ToggleMenu(UnityAction action)
+    void Credits(UnityAction action)
+    {
+        ButtonCredits.GetComponentInChildren<Button>().onClick.AddListener(action);
+    }
+
+
+    void ToggleMenu(UnityAction action)
   {
     ButtonToggle.GetComponentInChildren<Button>().onClick.AddListener(action);
   }
@@ -86,6 +96,14 @@ public class UI : MonoBehaviour
         PanelWinner.GetComponentInChildren<TMP_Text>().text =
         I18n.Fields["winner[" + Global.WinnerInt + "]"] + I18n.Fields["winner[2]"];
       }
-     menu.SetActive(isShowing);
-  }
+        menu.SetActive(isShowing);
+        if (isShowing)
+        {
+            PanelCredits.SetActive(isShowingCanvas[0]);
+        }
+        else
+        {
+            PanelCredits.SetActive(false);
+        }
+    }
 }

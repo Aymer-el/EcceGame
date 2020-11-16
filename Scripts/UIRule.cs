@@ -27,7 +27,8 @@ public class UIRule : MonoBehaviour
       I18n.Fields["menuStandartPiece"];
     ButtonMenuPal.GetComponentInChildren<TMP_Text>().text =
       I18n.Fields["menuPalPiece"];
-  
+   ButtonMenuScore.GetComponentInChildren<TMP_Text>().text =
+      I18n.Fields["menuScore"];
     PanelRulesPawns.GetComponentInChildren<TMP_Text>().text =
       I18n.Fields["standardMove[1]"];
     PanelRulesEcces.GetComponentInChildren<TMP_Text>().text =

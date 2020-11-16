@@ -1,29 +1,19 @@
-standardMove[1]=Un pion standard:
-standardMove[2]=    - bouge horizontallement et verticallement
-standardMove[3]=    - mange en diagonales
-standardMove[4]=Mettre un pion sur le plateau de jeu compte un tour.
+standardMove[1]=Les Pions <b> bougent LATERALLEMENT </b> et <b> MANGE sur les DIGONALES </b> comme aux échecs.
+ecceMove[1]=Une Pièce Ecce se <b> DÉPLACE et MANGE LATERALLEMENT et en DIAGONALES </b>, comme le roi aux échecs. Placez un pion normal sur votre pion ECCE pour <b>l'améliorer </b>.
+score[1]=Pour marquer des points, placez un pion <b> sur la case ENTER de votre adversaire </b>.
 
-palMove[1]=Un pion pal:
-palMove[2]=    - bouge et mange dans toute les directions. \n C'est à dire horizontalement, verticallement et en diagonal
-palMove[3]=    - Pour avoir un pion pal il faut transformer un pion standard en le plaçant sur la case verte pal.
+winner[0]=WHITE
+winner[1]=BLACK
+winner[2]= WINS
 
-score[1]=Pour marquer un point aller sur la case d'entrée de votre adversaire.
-score[2]=Le but du jeu est de marquer le plus de point possible.
-
-winner[0]= BLANC
-winner[1]= NOIR
-winner[2]= GAGNE
-
-
-menuStandartPiece= Pion Standard
-menuPalPiece= Pion Pal
-menuScore= Score
-menuExit= Sortir
+menuStandartPiece=PAWN
+menuPalPiece=KING - ECCE
+menuScore=SCORE
+menuExit=EXIT
 
 menuToggle=MENU
-menuShare=PARTAGER
-menuNewGame=NOUVELLE PARTIE
-menuRules=REGLES
-menuSound=SON
-menuCredits=CREDITS
-
+menuShare=SHARE
+menuNewGame=NEW GAME
+menuRules=RULES
+menuSound=SOUND
+menuCredits=CRE-DITS

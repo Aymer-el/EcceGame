@@ -101,7 +101,7 @@ public class Scenario : Global
     TryPlaceNewPiece(1);
     TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
     TryMovePiece(selectedPiece,
-      new Vector2(1 * caseLength, 4 * caseLength),
+      new Vector2(1 * caseLength, 3 * caseLength),
       new Vector2(1 * caseLength, 1 * caseLength));
     TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
     TryMovePiece(selectedPiece,
