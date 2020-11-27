@@ -93,7 +93,7 @@ public class Server : MonoBehaviour
         Debug.Log("somebody has connected !");
 
         StartListening();
-        Broadcast("SWHO|" + allUsers, clients[clients.Count - 1]);
+        Broadcast("SWHO|" + allUsers, clients);
     }
 
     private bool IsConnected(TcpClient c)
@@ -143,7 +143,6 @@ public class Server : MonoBehaviour
     // Server Read
     private void OnInComingData(ServerClient c, string data)
     {
-        Debug.Log("Server:" + data);
         string[] aData = data.Split('|');
         switch (aData[0])
         {
@@ -153,10 +152,20 @@ public class Server : MonoBehaviour
                 Broadcast("SCNN|" + c.clientName, clients);
                 break;
             case "CMOV":
-                data.Replace("C", "S");
+                Debug.Log("Server:" + clients.Count);
+                data = data.Replace("C", "S");
+                Broadcast(data, clients);
+                break;
+            case "CPLA":
+                data = data.Replace("C", "S");
+                Broadcast(data, clients);
+                break;
+            case "CSEL":
+                data = data.Replace("C", "S");
                 Broadcast(data, clients);
                 break;
         }
+        Broadcast("", clients);
     }
 }
 

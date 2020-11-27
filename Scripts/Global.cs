@@ -17,8 +17,6 @@ public class Global : MonoBehaviour
   public Text scoreWhite;
   public Text scoreBlack;
   public static Global EcceInstance;
-
-
   static bool isUIShown = false;
   public static bool IsUIShown { get => isUIShown; set => isUIShown = value; }
 
@@ -33,6 +31,7 @@ public class Global : MonoBehaviour
 
   /**** Action ****/
   public int player = 0;
+  public bool isWhite;
   protected Vector2 mouseOver;
   protected Vector2 startDrag;
 
@@ -58,9 +57,9 @@ public class Global : MonoBehaviour
         client = FindObjectOfType<Client>();
         if (client)
         {
-            player = client.isHost ? 1 : 0;
+            isWhite = !client.isHost;
         }
-        scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
+    scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
     scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
     this.GeneratePieces();
   }
@@ -79,12 +78,17 @@ public class Global : MonoBehaviour
     }
   }
 
+    public bool CanPlay()
+    {
+        return (isWhite && player == 0) || (!isWhite && player == 1);
+    }
+
   /*
    * Once the user ask to move a Piece
    */
   private void UpdateMouseOver()
   {
-    if (Camera.main && Input.GetMouseButtonDown(0) && !Global.IsUIShown)
+    if (Camera.main && Input.GetMouseButtonDown(0) && !Global.IsUIShown && CanPlay())
     {
       bool physicsEcceBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
          out RaycastHit hit, 25.0f, LayerMask.GetMask("EcceBoard"));
@@ -107,46 +111,47 @@ public class Global : MonoBehaviour
               if(physicsWhiteBanch && player == 0)
               {
                 TryPlaceNewPiece(player);
+            
               } else if(physicsBlackBanch && player == 1)
               {
                 TryPlaceNewPiece(player);
               }
+                if (client)
+                {
+                    Debug.Log("isthereclient");
+                    string msg = "CPLA|";
+                    msg += (isWhite ? 0 : 1).ToString();
+                    client.Send(msg);
+                }
             } else
             // Selecting a piece
             {
               TrySelectPiece(mouseOver, player);
-            }
+                if (client)
+                    {
+                        string msg = "CSEL|";
+                        msg += (isWhite ? 0 : 1).ToString() + "|";
+                        msg += mouseOver.x + "|";
+                        msg += mouseOver.y;
+                        client.Send(msg);
+                    }
+                }
           }
           else
           {
-            Piece advPiece = GetPiece(mouseOver);
-            if (advPiece != null && !advPiece.name.Contains(this.selectedPiece.name.Substring(0, 5)))
-            {
-              // Eating piece
-              if (GameLogic.IsMovePossible(true, selectedPiece.isEcce,
-                ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
-              {
-                RemovingPiece(ToArrayCoordinates(mouseOver), true);
-                TryMovePiece(selectedPiece, mouseOver, startDrag);
-              }
+              //TryMovePiece(mouseOver, startDrag);
+                if (client)
+                {
+                    string msg = "CMOV|";
+                    msg += (isWhite ? 0 : 1).ToString() + "|";
+                    msg += mouseOver.x + "|";
+                    msg += mouseOver.y + "|";
+                    msg += startDrag.x + "|";
+                    msg += startDrag.y;
+                    client.Send(msg);
+                }
+                    
             }
-            else
-            {
-              // Moving piece
-              // If there is no piece on the case && if it is a possible move
-              if (GetPiece(mouseOver) == null && GameLogic.IsMovePossible(selectedPiece.isEcce, true,
-                ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
-              {
-                TryMovePiece(selectedPiece, mouseOver, startDrag);
-              }
-              // Selecting another piece
-              else
-              {
-                DeselectPiece(startDrag);
-                TrySelectPiece(mouseOver, player);
-              }
-            }
-          }
         }
       }
     }
@@ -206,38 +211,64 @@ public class Global : MonoBehaviour
     );
   }
 
-  public virtual void TryMovePiece(Piece p, Vector2 mouseOver, Vector2 startDrag)
+  public virtual void TryMovePiece(Vector2 mouseOver, Vector2 startDrag)
   {
-    // Moving piece
-    p.transform.position =
-      (Vector3.right * ToBoardCoordinates(mouseOver).x) +
-      (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
-      (Vector3.up * 1);
-    string msg = "CMOV|";
-    msg += mouseOver.x.ToString() + "|";
-    msg += mouseOver.y.ToString() + "|";
-    msg += startDrag.x.ToString() + "|";
-    msg += startDrag.x.ToString();
+        Piece advPiece = GetPiece(mouseOver);
+        if (this.selectedPiece != null && advPiece != null && !advPiece.name.Contains(this.selectedPiece.name.Substring(0, 5)))
+        {
+            // Eating piece
+            if (GameLogic.IsMovePossible(true, selectedPiece.isEcce,
+              ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
+            {
+                RemovingPiece(ToArrayCoordinates(mouseOver), true);
+                Move(mouseOver, startDrag);
+            }
+        }
+        else
+        {
+            // Moving piece
+            // If there is no piece on the case && if it is a possible move
+            if (GetPiece(mouseOver) == null && GameLogic.IsMovePossible(selectedPiece.isEcce, true,
+              ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
+            {
+                Move(mouseOver, startDrag);
+            }
+            // Selecting another piece
+            else
+            {
+                DeselectPiece(startDrag);
+                TrySelectPiece(mouseOver, player);
+            }
+        }
+  }
 
-    client.Send(msg);
-    // Deleting piece in array
-    pieces[
+    public void Move(Vector2 mouseOver, Vector2 startDrag)
+    {
+        // Moving piece
+        Piece p = selectedPiece;
+        p.transform.position =
+          (Vector3.right * ToBoardCoordinates(mouseOver).x) +
+          (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
+          (Vector3.up * 1);
+
+        // Deleting piece in array
+        pieces[
       (int)ToArrayCoordinates(startDrag).x,
       (int)ToArrayCoordinates(startDrag).y
       ] = null;
-    // Placing piece in array
-    pieces[
-      (int)ToArrayCoordinates(mouseOver).x,
-      (int)ToArrayCoordinates(mouseOver).y
-      ] = p;
-    // In case of a first piece move
-    //TryPlaceNewPiece(player, ToArrayCoordinates(startDrag));
-    CheckPieceEvolution(mouseOver, player);
-    CheckOneUp(p, ToArrayCoordinates(mouseOver), player);
-    FinishTurn();
-    DeselectPiece(mouseOver);
-    DetermineWinner();
-  }
+        // Placing piece in array
+        pieces[
+          (int)ToArrayCoordinates(mouseOver).x,
+          (int)ToArrayCoordinates(mouseOver).y
+          ] = p;
+        // In case of a first piece move
+        //TryPlaceNewPiece(player, ToArrayCoordinates(startDrag));
+        CheckPieceEvolution(mouseOver, player);
+        CheckOneUp(p, ToArrayCoordinates(mouseOver), player);
+        FinishTurn();
+        DeselectPiece(mouseOver);
+        DetermineWinner();
+    }
 
 
   /*
@@ -327,11 +358,12 @@ public class Global : MonoBehaviour
 
   public void TryPlaceNewPiece(int player)
   {
-    if (player == 0 && pieces[1, 1] == null)
+        
+        if (player == 0 && pieces[1, 1] == null)
     {
       selectedPiece = GetANewPiece(player);
       countWhitePiecesOnBoard++;
-      TryMovePiece(selectedPiece,
+      Move(
         new Vector2(1 * caseLength, 1 * caseLength),
         new Vector2(1 * caseLength, 1 * caseLength));
     }
@@ -339,10 +371,11 @@ public class Global : MonoBehaviour
     {
       selectedPiece = GetANewPiece(player);
       countBlackPiecesOnBoard++;
-      TryMovePiece(selectedPiece,
+      Move(
         new Vector2(6 * caseLength, 1 * caseLength),
         new Vector2(6 * caseLength, 1 * caseLength));
     }
+    
   }
 
   private Piece GetANewPiece(int player)

@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         });
         Back(() => {
             Global.WinnerInt = -1;
-            SceneManager.LoadScene("NewGameScene");
+            SceneManager.LoadScene("MultiplayerScene");
         });
         Connect(() => {
             string hostAddress = GameObject.Find("HostInput").GetComponent<TMP_InputField>().text;

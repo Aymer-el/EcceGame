@@ -64,7 +64,18 @@ public class Client : MonoBehaviour
                 UserConnnected(aData[1], false);
                 break;
             case "SMOV":
-                
+                Global.EcceInstance.TrySelectPiece(new Vector2(int.Parse(aData[1]), int.Parse(aData[2])), int.Parse(aData[5]));
+                Global.EcceInstance.TryMovePiece(
+                    new Vector2(int.Parse(aData[2]), int.Parse(aData[3])),
+                    new Vector2(int.Parse(aData[4]), int.Parse(aData[5])));
+                break;
+            case "SPLA":
+                Global.EcceInstance.TryPlaceNewPiece(int.Parse(aData[1]));
+                break;
+            case "SSEL":
+                Global.EcceInstance.TrySelectPiece(
+                    new Vector2(int.Parse(aData[2]), int.Parse(aData[3])),
+                    int.Parse(aData[1]));
                 break;
         }
     }

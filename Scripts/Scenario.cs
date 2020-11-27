@@ -100,31 +100,31 @@ public class Scenario : Global
     TryPlaceNewPiece(0);
     TryPlaceNewPiece(1);
     TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
-    TryMovePiece(selectedPiece,
+    TryMovePiece(
       new Vector2(1 * caseLength, 3 * caseLength),
       new Vector2(1 * caseLength, 1 * caseLength));
     TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
-    TryMovePiece(selectedPiece,
+    TryMovePiece(
       new Vector2(3 * caseLength, 2 * caseLength),
       new Vector2(6 * caseLength, 1 * caseLength));
     TryPlaceNewPiece(1);
     TryPlaceNewPiece(0);
     TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
-    TryMovePiece(selectedPiece,
+    TryMovePiece(
       new Vector2(4 * caseLength, 1 * caseLength),
       new Vector2(6 * caseLength, 1 * caseLength));
     TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
-    TryMovePiece(selectedPiece,
+    TryMovePiece(
       new Vector2(2 * caseLength, 2 * caseLength),
       new Vector2(1 * caseLength, 1 * caseLength));
     TryPlaceNewPiece(1);
     TryPlaceNewPiece(0);
     TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
-    TryMovePiece(selectedPiece,
+    TryMovePiece(
       new Vector2(3 * caseLength, 0 * caseLength),
       new Vector2(6 * caseLength, 1 * caseLength));
     TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
-    TryMovePiece(selectedPiece,
+    TryMovePiece(
       new Vector2(1 * caseLength, 1 * caseLength),
       new Vector2(1 * caseLength, 1 * caseLength));
   }
@@ -136,9 +136,9 @@ public class Scenario : Global
     PlaceCube(selectedPiece, mouseOver);
   }
 
-  public override void TryMovePiece(Piece p, Vector2 mouseOver, Vector2 startDrag)
+  public override void TryMovePiece(Vector2 mouseOver, Vector2 startDrag)
   {
-    base.TryMovePiece(p, mouseOver, startDrag);
+    base.TryMovePiece(mouseOver, startDrag);
     RemoveCube();
   }
 }
