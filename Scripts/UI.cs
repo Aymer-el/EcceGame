@@ -9,7 +9,7 @@ public class UI : MonoBehaviour
   public GameObject menu;
   public static bool isShowing = false;
   public GameObject ButtonToggle;
-  public GameObject ButtonShare;
+  public GameObject ButtonConnexion;
   public GameObject ButtonNewGame;
   public GameObject ButtonRules;
   public GameObject ButtonSound;
@@ -31,10 +31,14 @@ public class UI : MonoBehaviour
         SceneManager.LoadScene("RulesScene");
         isShowing = false;
     });
+    Connexion(() => {
+        SceneManager.LoadScene("Connexion");
+        isShowing = false;
+    });
     Credits(() => {
         isShowingCanvas[0] = !isShowingCanvas[0];
     });
-        Sound(() => GetComponent<AudioSource>().mute = !GetComponent<AudioSource>().mute);
+    Sound(() => GetComponent<AudioSource>().mute = !GetComponent<AudioSource>().mute);
     ToggleMenu(() => {
       isShowing = !isShowing;
       if (!isShowing)
@@ -47,7 +51,7 @@ public class UI : MonoBehaviour
       }
       Global.IsUIShown = isShowing;
     });
-    ButtonShare.GetComponentInChildren<TMP_Text>().text =
+    ButtonConnexion.GetComponentInChildren<TMP_Text>().text =
       I18n.Fields["menuShare"];
     ButtonNewGame.GetComponentInChildren<TMP_Text>().text =
       I18n.Fields["menuNewGame"];
@@ -75,7 +79,10 @@ public class UI : MonoBehaviour
   {
     ButtonSound.GetComponentInChildren<Button>().onClick.AddListener(action);
   }
-
+    void Connexion(UnityAction action)
+    {
+        ButtonConnexion.GetComponentInChildren<Button>().onClick.AddListener(action);
+    }
     void Credits(UnityAction action)
     {
         ButtonCredits.GetComponentInChildren<Button>().onClick.AddListener(action);

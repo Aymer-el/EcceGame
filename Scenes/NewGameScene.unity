@@ -946,7 +946,7 @@ GameObject:
   - component: {fileID: 758514067}
   - component: {fileID: 758514066}
   m_Layer: 5
-  m_Name: ButtonShare
+  m_Name: ButtonConnexion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1138,7 +1138,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SHARE
+  m_text: MULTI-GAMER
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d0144f815dfbc47919c562aa72a5b1b4, type: 2}
   m_sharedMaterial: {fileID: 5950009526262325975, guid: d0144f815dfbc47919c562aa72a5b1b4,
@@ -1166,8 +1166,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 75
-  m_fontSizeBase: 75
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1732,7 +1732,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: {fileID: 1671493149}
   ButtonToggle: {fileID: 1660252078}
-  ButtonShare: {fileID: 758514064}
+  ButtonConnexion: {fileID: 758514064}
   ButtonNewGame: {fileID: 486816142}
   ButtonRules: {fileID: 966964738}
   ButtonSound: {fileID: 1672600727}

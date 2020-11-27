@@ -16,6 +16,7 @@ public class Global : MonoBehaviour
   public GameObject blackEccePrefab;
   public Text scoreWhite;
   public Text scoreBlack;
+  public static Global EcceInstance;
 
 
   static bool isUIShown = false;
@@ -39,7 +40,10 @@ public class Global : MonoBehaviour
   int scoreBlackInt = 0;
   public static int WinnerInt { get; set; } = -1;
 
-  protected readonly int caseLength = 2;
+  public Client client;
+
+
+    protected readonly int caseLength = 2;
 
   /**** View ****/
   protected Piece selectedPiece;
@@ -50,7 +54,13 @@ public class Global : MonoBehaviour
    */
   public void Awake()
   {
-    scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
+        EcceInstance = this;
+        client = FindObjectOfType<Client>();
+        if (client)
+        {
+            player = client.isHost ? 1 : 0;
+        }
+        scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
     scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
     this.GeneratePieces();
   }
@@ -203,6 +213,13 @@ public class Global : MonoBehaviour
       (Vector3.right * ToBoardCoordinates(mouseOver).x) +
       (Vector3.forward * ToBoardCoordinates(mouseOver).y) +
       (Vector3.up * 1);
+    string msg = "CMOV|";
+    msg += mouseOver.x.ToString() + "|";
+    msg += mouseOver.y.ToString() + "|";
+    msg += startDrag.x.ToString() + "|";
+    msg += startDrag.x.ToString();
+
+    client.Send(msg);
     // Deleting piece in array
     pieces[
       (int)ToArrayCoordinates(startDrag).x,
