@@ -31,15 +31,14 @@ public class Global : MonoBehaviour
 
   /**** Action ****/
   public int player = 0;
-  public bool isWhite;
+  public bool isWhite = true;
   protected Vector2 mouseOver;
   protected Vector2 startDrag;
 
   int scoreWhiteInt = 0;
   int scoreBlackInt = 0;
   public static int WinnerInt { get; set; } = -1;
-
-  public Client client;
+    public ClientTCP clientTCP;
 
 
     protected readonly int caseLength = 2;
@@ -51,13 +50,14 @@ public class Global : MonoBehaviour
    * Gather all components.
    * Generate Pieces.
    */
-  public void Awake()
+  public void Start()
   {
         EcceInstance = this;
-        client = FindObjectOfType<Client>();
-        if (client)
+        clientTCP = GameObject.FindObjectOfType<ClientTCP>();
+        if (clientTCP)
         {
-            isWhite = !client.isHost;
+            Debug.Log("ok");
+           
         }
     scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
     scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
@@ -116,31 +116,31 @@ public class Global : MonoBehaviour
               {
                 TryPlaceNewPiece(player);
               }
-                if (client)
+                if (clientTCP)
                 {
                     Debug.Log("isthereclient");
                     string msg = "CPLA|";
                     msg += (isWhite ? 0 : 1).ToString();
-                    client.Send(msg);
+                    ClientTCP.SendCMove(msg);
                 }
             } else
             // Selecting a piece
             {
               TrySelectPiece(mouseOver, player);
-                if (client)
+                if (clientTCP)
                     {
                         string msg = "CSEL|";
                         msg += (isWhite ? 0 : 1).ToString() + "|";
                         msg += mouseOver.x + "|";
                         msg += mouseOver.y;
-                        client.Send(msg);
+                        ClientTCP.SendCMove(msg);
                     }
                 }
           }
           else
           {
               //TryMovePiece(mouseOver, startDrag);
-                if (client)
+                if (clientTCP)
                 {
                     string msg = "CMOV|";
                     msg += (isWhite ? 0 : 1).ToString() + "|";
@@ -148,7 +148,7 @@ public class Global : MonoBehaviour
                     msg += mouseOver.y + "|";
                     msg += startDrag.x + "|";
                     msg += startDrag.y;
-                    client.Send(msg);
+                    ClientTCP.SendCMove(msg);
                 }
                     
             }

@@ -3745,6 +3745,10 @@ MonoBehaviour:
   countWhitePiecesOnBoard: 0
   countBlackPiecesOnBoard: 0
   player: 0
+  isWhite: 0
+  clientTCPPrefab: {fileID: 8166806553507575566, guid: c3a6b0b26020c6e47a13f54ba80f3ba3,
+    type: 3}
+  clientTCP: {fileID: 0}
 --- !u!33 &7017206956143746263
 MeshFilter:
   m_ObjectHideFlags: 0

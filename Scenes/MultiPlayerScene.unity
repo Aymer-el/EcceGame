@@ -1995,7 +1995,8 @@ MonoBehaviour:
   countWhitePiecesOnBoard: 0
   countBlackPiecesOnBoard: 0
   player: 0
-  client: {fileID: 0}
+  isWhite: 0
+  clientTCP: {fileID: 0}
 --- !u!4 &1351755774
 Transform:
   m_ObjectHideFlags: 0

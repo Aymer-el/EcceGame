@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject serverMenu;
     public GameObject connectMenu;
     public GameObject ServerPrefab;
-    public GameObject ClientPrefab;
+    public GameObject ClientTCPPrefab;
     public static bool isActive = true;
 
     public static GameManager Instance { set; get; }
@@ -31,13 +31,8 @@ public class GameManager : MonoBehaviour
                 Server s = Instantiate(ServerPrefab).GetComponent<Server>();
                 s.Init();
 
-                Client c = Instantiate(ClientPrefab).GetComponent<Client>();
-                c.isHost = true;
-                if(c.clientName == "")
-                {
-                    c.clientName = "Host";
-                }
-                c.ConnectToServer("127.0.0.1", 6321);
+                ClientTCP c = Instantiate(ClientTCPPrefab).GetComponent<ClientTCP>();
+                c.Connect();
             }
             catch (Exception e)
             {
@@ -57,14 +52,8 @@ public class GameManager : MonoBehaviour
 
             try
             {
-                Client c = Instantiate(ClientPrefab).GetComponent<Client>();
-                c.clientName = GameObject.Find("NameInput").GetComponent<TMP_InputField>().text;
-                if(c.clientName == "")
-                {
-                    c.clientName = "client";
-                }
-                c.isHost = false;
-                c.ConnectToServer(hostAddress, 6321);
+                ClientTCP c = Instantiate(ClientTCPPrefab).GetComponent<ClientTCP>();
+                c.Connect();
                 Debug.Log("by connect button");
             }
             catch (Exception e)
