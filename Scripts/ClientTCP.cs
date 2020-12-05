@@ -17,6 +17,7 @@ public class ClientTCP : MonoBehaviour
     public static int players = 0;
     public static int roomNumber;
     public static String testmsg = "";
+    public static bool connected;
 
     void Start()
     {
@@ -51,10 +52,10 @@ public class ClientTCP : MonoBehaviour
                 case "SCNN":
                     break;
                 case "SMOV":
-                    Global.EcceInstance.TrySelectPiece(new Vector2(int.Parse(aData[1]), int.Parse(aData[2])), int.Parse(aData[5]));
+                    //Global.EcceInstance.TrySelectPiece(new Vector2(int.Parse(aData[1]), int.Parse(aData[2])), int.Parse(aData[5]));
                     Global.EcceInstance.TryMovePiece(
-                        new Vector2(int.Parse(aData[2]), int.Parse(aData[3])),
-                        new Vector2(int.Parse(aData[4]), int.Parse(aData[5])));
+                        new Vector2(int.Parse(aData[4]), int.Parse(aData[5])),
+                        new Vector2(int.Parse(aData[6]), int.Parse(aData[7])));
                     break;
                 case "SPLA":
                     try
@@ -79,6 +80,7 @@ public class ClientTCP : MonoBehaviour
     public static void ConnectCallBack(IAsyncResult ar)
     {
         _clientSocket.EndConnect(ar);
+        connected = true;
         while (true)
         {
             OnReceive();

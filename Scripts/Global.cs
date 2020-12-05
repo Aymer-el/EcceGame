@@ -31,7 +31,6 @@ public class Global : MonoBehaviour
 
   /**** Action ****/
   public int player = 0;
-  public bool isWhite = true;
   protected Vector2 mouseOver;
   protected Vector2 startDrag;
 
@@ -73,13 +72,13 @@ public class Global : MonoBehaviour
 
     public bool CanPlay()
     {
-        return (isWhite && player == 0) || (!isWhite && player == 1);
+        return true;// (isWhite && player == 0) || (!isWhite && player == 1);
     }
 
   /*
    * Once the user ask to move a Piece
    */
-  private void UpdateMouseOver()
+  public virtual void UpdateMouseOver()
   {
     if (Camera.main && Input.GetMouseButtonDown(0) && !Global.IsUIShown && CanPlay())
     {
@@ -103,49 +102,22 @@ public class Global : MonoBehaviour
             {
               if(physicsWhiteBanch && player == 0)
               {
-               //TryPlaceNewPiece(player);
+               TryPlaceNewPiece(player);
             
               } else if(physicsBlackBanch && player == 1)
               {
-               //TryPlaceNewPiece(player);
+               TryPlaceNewPiece(player);
               }
-                            
-                                Debug.Log("isthereclient");
-                    string msg = "CPLA|";
-                    msg += ClientTCP.roomNumber.ToString() + '|';
-                    msg += ClientTCP.players.ToString() + '|';
-                    msg += (isWhite ? 0 : 1).ToString();
-                    ClientTCP.SendCMove(msg);
                 
             } else
             // Selecting a piece
             {
-                            
-                                string msg = "CSEL|";
-                            msg += ClientTCP.roomNumber.ToString() + '|';
-                            msg += ClientTCP.players.ToString() + '|';
-                            msg += (isWhite ? 0 : 1).ToString() + "|";
-                            msg += mouseOver.x + "|";
-                            msg += mouseOver.y;
-                            ClientTCP.SendCMove(msg);
-                    
+                TrySelectPiece(mouseOver, player);
                 }
           }
           else
           {
-                        //TryMovePiece(mouseOver, startDrag);
-                     
-                            string msg = "CMOV|";
-                        msg += ClientTCP.roomNumber.ToString() + '|';
-                        msg += ClientTCP.players.ToString() + '|';
-                        msg += (isWhite ? 0 : 1).ToString() + "|";
-                        msg += mouseOver.x + "|";
-                        msg += mouseOver.y + "|";
-                        msg += startDrag.x + "|";
-                        msg += startDrag.y;
-                    ClientTCP.SendCMove(msg);
-                
-                    
+                TryMovePiece(mouseOver, startDrag);
             }
         }
       }
@@ -226,7 +198,7 @@ public class Global : MonoBehaviour
             if (GetPiece(mouseOver) == null && GameLogic.IsMovePossible(selectedPiece.isEcce, true,
               ToBoardCoordinates(startDrag), ToBoardCoordinates(mouseOver)))
             {
-                Move(mouseOver, startDrag);
+               Move(mouseOver, startDrag);
             }
             // Selecting another piece
             else
@@ -379,8 +351,6 @@ public class Global : MonoBehaviour
 
   private Piece GetANewPiece(int player)
   {
-        Debug.Log("in here1");
-
         var i = 0;
     var found = false;
     while (i <= 7 && !found)
