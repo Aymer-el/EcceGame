@@ -32,7 +32,6 @@ public class GameManager : MonoBehaviour
                 s.Init();
 
                 ClientTCP c = Instantiate(ClientTCPPrefab).GetComponent<ClientTCP>();
-                c.Connect();
             }
             catch (Exception e)
             {
@@ -80,10 +79,11 @@ public class GameManager : MonoBehaviour
         //this.isActive = false;
     }
 
-    public void StartGame()
+    public static void StartGame()
     {
         GameManager.isActive = false;
-        SceneManager.LoadScene("NewGameScene");
+        Debug.Log("in scee");
+        SceneManager.LoadScene("MultiPlayerScene");
     }
 
     public void Update()

@@ -12,7 +12,7 @@ public class Scenario : Global
   public GameObject tutorialCubePrefab;
   public TutorialCube[] tutorialCubes = new TutorialCube[9];
 
-  public new void Awake()
+  public void Awake()
   {
     scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
     scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();

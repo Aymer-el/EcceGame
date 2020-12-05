@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using System.Net;
 using System.Net.Sockets;
+using UnityEngine.SceneManagement;
+
 
 
 public class ClientTCP : MonoBehaviour
@@ -11,6 +13,11 @@ public class ClientTCP : MonoBehaviour
     // Start is called before the first frame update
     public static Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     private byte[] _asyncbuffer = new byte[1024];
+
+    public static int players = 0;
+    public static int roomNumber;
+    public static String testmsg = "";
+
     void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -25,15 +32,56 @@ public class ClientTCP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(testmsg);
+
+        if (testmsg != "")
+        {
+            string[] aData = testmsg.Split('|');
+            Int32.TryParse(aData[2], out int numberOfPlayer);
+            Debug.Log(testmsg);
+            switch (aData[0])
+            {
+                case "SWHO":
+                    for (int i = 1; i < aData.Length - 1; i++)
+                    {
+                        ClientTCP.roomNumber = int.Parse(aData[1]);
+                        ClientTCP.UserConnnected(int.Parse(aData[2]));
+                    }
+                    break;
+                case "SCNN":
+                    break;
+                case "SMOV":
+                    Global.EcceInstance.TrySelectPiece(new Vector2(int.Parse(aData[1]), int.Parse(aData[2])), int.Parse(aData[5]));
+                    Global.EcceInstance.TryMovePiece(
+                        new Vector2(int.Parse(aData[2]), int.Parse(aData[3])),
+                        new Vector2(int.Parse(aData[4]), int.Parse(aData[5])));
+                    break;
+                case "SPLA":
+                    try
+                    {
+                        Global.EcceInstance.TryPlaceNewPiece(int.Parse(aData[3]));
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e);
+                    }
+                    break;
+                case "SSEL":
+                    Global.EcceInstance.TrySelectPiece(
+                        new Vector2(int.Parse(aData[4]), int.Parse(aData[5])),
+                        int.Parse(aData[3]));
+                    break;
+            }
+            testmsg = "";
+        }
     }
 
-    public void ConnectCallBack(IAsyncResult ar)
+    public static void ConnectCallBack(IAsyncResult ar)
     {
         _clientSocket.EndConnect(ar);
         while (true)
         {
             OnReceive();
-            Debug.Log("on receive");
         }
     }
 
@@ -49,11 +97,11 @@ public class ClientTCP : MonoBehaviour
             currentread = totalread = _clientSocket.Receive(_sizeinfo);
             if (totalread <= 0)
             {
-                Console.WriteLine("You are not connected to the server.");
+                Debug.Log("You are not connected to the server.");
             }
             else
             {
-                Console.WriteLine("Receiving", _receivedbuffer);
+                Debug.Log(_receivedbuffer);
                 while (totalread < _sizeinfo.Length && currentread > 0)
                 {
                     currentread = _clientSocket.Receive(_sizeinfo, totalread, _sizeinfo.Length - totalread, SocketFlags.None);
@@ -84,7 +132,7 @@ public class ClientTCP : MonoBehaviour
         }
         catch
         {
-            Console.WriteLine("You are not connected to the server.");
+            Debug.Log("You are not connected to the server.");
         }
     }
     public static void SendData(byte[] data)
@@ -93,7 +141,6 @@ public class ClientTCP : MonoBehaviour
     }
     public static void ThankYouServer()
     {
-        Debug.Log("in thanks you");
         PacketBuffer buffer = new PacketBuffer();
         buffer.WriteInteger((int)ClientPackets.CThankyou);
         buffer.WriteString("Thanks you server");
@@ -103,12 +150,20 @@ public class ClientTCP : MonoBehaviour
 
     public static void SendCMove(string msg)
     {
-        Debug.Log("in thanks you");
         PacketBuffer buffer = new PacketBuffer();
         buffer.WriteInteger((int)ClientPackets.CMove);
         buffer.WriteString(msg);
         SendData(buffer.ToArray());
         buffer.Dispose();
     }
+    public static void UserConnnected(int p)
+    {
+        players = p;
+        if(players == 2)
+        {
+            GameManager.StartGame();
+        }
+    }
+
 
 }

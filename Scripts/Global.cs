@@ -38,8 +38,6 @@ public class Global : MonoBehaviour
   int scoreWhiteInt = 0;
   int scoreBlackInt = 0;
   public static int WinnerInt { get; set; } = -1;
-    public ClientTCP clientTCP;
-
 
     protected readonly int caseLength = 2;
 
@@ -53,12 +51,7 @@ public class Global : MonoBehaviour
   public void Start()
   {
         EcceInstance = this;
-        clientTCP = GameObject.FindObjectOfType<ClientTCP>();
-        if (clientTCP)
-        {
-            Debug.Log("ok");
-           
-        }
+        Debug.Log("by connect button");
     scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
     scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
     this.GeneratePieces();
@@ -110,46 +103,48 @@ public class Global : MonoBehaviour
             {
               if(physicsWhiteBanch && player == 0)
               {
-                TryPlaceNewPiece(player);
+               //TryPlaceNewPiece(player);
             
               } else if(physicsBlackBanch && player == 1)
               {
-                TryPlaceNewPiece(player);
+               //TryPlaceNewPiece(player);
               }
-                if (clientTCP)
-                {
-                    Debug.Log("isthereclient");
+                            
+                                Debug.Log("isthereclient");
                     string msg = "CPLA|";
+                    msg += ClientTCP.roomNumber.ToString() + '|';
+                    msg += ClientTCP.players.ToString() + '|';
                     msg += (isWhite ? 0 : 1).ToString();
                     ClientTCP.SendCMove(msg);
-                }
+                
             } else
             // Selecting a piece
             {
-              TrySelectPiece(mouseOver, player);
-                if (clientTCP)
-                    {
-                        string msg = "CSEL|";
-                        msg += (isWhite ? 0 : 1).ToString() + "|";
-                        msg += mouseOver.x + "|";
-                        msg += mouseOver.y;
-                        ClientTCP.SendCMove(msg);
-                    }
+                            
+                                string msg = "CSEL|";
+                            msg += ClientTCP.roomNumber.ToString() + '|';
+                            msg += ClientTCP.players.ToString() + '|';
+                            msg += (isWhite ? 0 : 1).ToString() + "|";
+                            msg += mouseOver.x + "|";
+                            msg += mouseOver.y;
+                            ClientTCP.SendCMove(msg);
+                    
                 }
           }
           else
           {
-              //TryMovePiece(mouseOver, startDrag);
-                if (clientTCP)
-                {
-                    string msg = "CMOV|";
-                    msg += (isWhite ? 0 : 1).ToString() + "|";
-                    msg += mouseOver.x + "|";
-                    msg += mouseOver.y + "|";
-                    msg += startDrag.x + "|";
-                    msg += startDrag.y;
+                        //TryMovePiece(mouseOver, startDrag);
+                     
+                            string msg = "CMOV|";
+                        msg += ClientTCP.roomNumber.ToString() + '|';
+                        msg += ClientTCP.players.ToString() + '|';
+                        msg += (isWhite ? 0 : 1).ToString() + "|";
+                        msg += mouseOver.x + "|";
+                        msg += mouseOver.y + "|";
+                        msg += startDrag.x + "|";
+                        msg += startDrag.y;
                     ClientTCP.SendCMove(msg);
-                }
+                
                     
             }
         }
@@ -358,11 +353,15 @@ public class Global : MonoBehaviour
 
   public void TryPlaceNewPiece(int player)
   {
-        
+        Debug.Log(player);
         if (player == 0 && pieces[1, 1] == null)
     {
-      selectedPiece = GetANewPiece(player);
-      countWhitePiecesOnBoard++;
+            Debug.Log(pieces[1,1]);
+
+            selectedPiece = GetANewPiece(player);
+            Debug.Log(selectedPiece);
+
+            countWhitePiecesOnBoard++;
       Move(
         new Vector2(1 * caseLength, 1 * caseLength),
         new Vector2(1 * caseLength, 1 * caseLength));
@@ -380,7 +379,9 @@ public class Global : MonoBehaviour
 
   private Piece GetANewPiece(int player)
   {
-    var i = 0;
+        Debug.Log("in here1");
+
+        var i = 0;
     var found = false;
     while (i <= 7 && !found)
     {
@@ -394,7 +395,9 @@ public class Global : MonoBehaviour
       }
     }
     Piece piece = newPiecesNotOnBoard[player, i];
-    newPiecesNotOnBoard[player, i] = null;
+        Debug.Log("in here2");
+        Debug.Log(piece);
+        newPiecesNotOnBoard[player, i] = null;
     return piece;
   }
 

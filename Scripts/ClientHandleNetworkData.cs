@@ -39,11 +39,12 @@ public class ClientHandleNetworkData: MonoBehaviour
             buffer.WriteBytes(data);
             buffer.ReadInteger();
             string msg = buffer.ReadString();
-            Debug.Log(msg);
             buffer.Dispose();
+            ClientTCP.testmsg = msg;
+            Debug.Log(msg);
 
-            // add your code you want to execute here:
-            ClientTCP.ThankYouServer();
+        // add your code you want to execute here:
+        ClientTCP.ThankYouServer();
         }
 
     private static void handleSMove(byte[] data)
@@ -52,7 +53,7 @@ public class ClientHandleNetworkData: MonoBehaviour
         buffer.WriteBytes(data);
         buffer.ReadInteger();
         string msg = buffer.ReadString();
-        Console.WriteLine(msg);
+        Debug.Log(msg);
         buffer.Dispose();
     }
 }
