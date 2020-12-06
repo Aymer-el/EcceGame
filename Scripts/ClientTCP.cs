@@ -14,8 +14,9 @@ public class ClientTCP : MonoBehaviour
     public static Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     private byte[] _asyncbuffer = new byte[1024];
 
-    public static int players = 0;
+    public static int numberOfPlayers = 0;
     public static int roomNumber;
+    public static int player;
     public static String testmsg = "";
     public static bool connected;
 
@@ -45,14 +46,18 @@ public class ClientTCP : MonoBehaviour
                 case "SWHO":
                     for (int i = 1; i < aData.Length - 1; i++)
                     {
-                        ClientTCP.roomNumber = int.Parse(aData[1]);
-                        ClientTCP.UserConnnected(int.Parse(aData[2]));
+                        roomNumber = int.Parse(aData[1]);
+                        numberOfPlayers = int.Parse(aData[2]);
+                        player = int.Parse(aData[3]);
+                        if (numberOfPlayers == 2)
+                        {
+                            GameManager.StartGame();
+                        }
                     }
                     break;
                 case "SCNN":
                     break;
                 case "SMOV":
-                    //Global.EcceInstance.TrySelectPiece(new Vector2(int.Parse(aData[1]), int.Parse(aData[2])), int.Parse(aData[5]));
                     Global.EcceInstance.TryMovePiece(
                         new Vector2(int.Parse(aData[4]), int.Parse(aData[5])),
                         new Vector2(int.Parse(aData[6]), int.Parse(aData[7])));
@@ -160,8 +165,8 @@ public class ClientTCP : MonoBehaviour
     }
     public static void UserConnnected(int p)
     {
-        players = p;
-        if(players == 2)
+        numberOfPlayers = p;
+        if(numberOfPlayers == 2)
         {
             GameManager.StartGame();
         }

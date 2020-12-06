@@ -12,6 +12,7 @@ public class ClientHandleNetworkData: MonoBehaviour
             Debug.Log("Initialize network packages.");
             Packets = new Dictionary<int, Packet_>
             {
+                { (int)ServerPackets.SServerFull, handleServerFull },
                 { (int)ServerPackets.SConnectionOK, handleConnectionOK },
                 { (int)ServerPackets.SMove, handleSMove }
             };
@@ -48,6 +49,16 @@ public class ClientHandleNetworkData: MonoBehaviour
         }
 
     private static void handleSMove(byte[] data)
+    {
+        PacketBuffer buffer = new PacketBuffer();
+        buffer.WriteBytes(data);
+        buffer.ReadInteger();
+        string msg = buffer.ReadString();
+        Debug.Log(msg);
+        buffer.Dispose();
+    }
+
+    private static void handleServerFull(byte[] data)
     {
         PacketBuffer buffer = new PacketBuffer();
         buffer.WriteBytes(data);

@@ -8,17 +8,20 @@ public interface ISelect
 
 public class Global : MonoBehaviour
 {
-  /**** Dependency ****/
-  // Board or awaiting pieces to enter in game or that.
-  public GameObject whitePiecePrefab;
-  public GameObject blackPiecePrefab;
-  public GameObject whiteEccePrefab;
-  public GameObject blackEccePrefab;
-  public Text scoreWhite;
-  public Text scoreBlack;
-  public static Global EcceInstance;
-  static bool isUIShown = false;
-  public static bool IsUIShown { get => isUIShown; set => isUIShown = value; }
+    public static Global EcceInstance;
+
+    /**** Dependency ****/
+    // Board or awaiting pieces to enter in game or that.
+    public GameObject whitePiecePrefab;
+    public GameObject blackPiecePrefab;
+    public GameObject whiteEccePrefab;
+    public GameObject blackEccePrefab;
+
+
+    public Text scoreWhite;
+    public Text scoreBlack;
+    static bool isUIShown = false;
+    public static bool IsUIShown { get => isUIShown; set => isUIShown = value; }
 
   /**** Relative to Game Object and View ****/
   // Unique set of Pieces.
@@ -64,10 +67,6 @@ public class Global : MonoBehaviour
     this.UpdateMouseOver();
     scoreWhite.text = scoreWhiteInt.ToString();
     scoreBlack.text = scoreBlackInt.ToString();
-    if(WinnerInt > -1)
-    {
-
-    }
   }
 
     public bool CanPlay()

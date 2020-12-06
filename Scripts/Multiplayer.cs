@@ -17,19 +17,28 @@ public class Multiplayer : Global
                 // Saving mouseOver
                 mouseOver.x = (int)hit.point.x;
                 mouseOver.y = (int)hit.point.z;
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) && player == ClientTCP.player)
                 {
                     if (selectedPiece == null)
                     {
                         // Selecting a new piece
                         if (physicsWhiteBanch || physicsBlackBanch)
                         {
-                            if (ClientTCP.connected)
+                            if (physicsWhiteBanch && player == 0 && ClientTCP.connected)
                             {
                                 string msg = "CPLA|";
                                 msg += ClientTCP.roomNumber.ToString() + '|';
-                                msg += ClientTCP.players.ToString() + '|';
-                                msg += player.ToString();
+                                msg += ClientTCP.numberOfPlayers.ToString() + '|';
+                                msg += ClientTCP.player.ToString() + '|';
+                                ClientTCP.SendCMove(msg);
+
+                            }
+                            else if (physicsBlackBanch && player == 1 && ClientTCP.connected)
+                            {
+                                string msg = "CPLA|";
+                                msg += ClientTCP.roomNumber.ToString() + '|';
+                                msg += ClientTCP.numberOfPlayers.ToString() + '|';
+                                msg += ClientTCP.player.ToString() + '|';
                                 ClientTCP.SendCMove(msg);
                             }
                         }
@@ -40,8 +49,8 @@ public class Multiplayer : Global
                             {
                                 string msg = "CSEL|";
                                 msg += ClientTCP.roomNumber.ToString() + '|';
-                                msg += ClientTCP.players.ToString() + '|';
-                                msg += player.ToString() + "|";
+                                msg += ClientTCP.numberOfPlayers.ToString() + '|';
+                                msg += ClientTCP.player.ToString() + '|';
                                 msg += mouseOver.x + "|";
                                 msg += mouseOver.y;
                                 ClientTCP.SendCMove(msg);
@@ -54,8 +63,8 @@ public class Multiplayer : Global
                         {
                             string msg = "CMOV|";
                             msg += ClientTCP.roomNumber.ToString() + '|';
-                            msg += ClientTCP.players.ToString() + '|';
-                            msg += player.ToString() + "|";
+                            msg += ClientTCP.numberOfPlayers.ToString() + '|';
+                            msg += ClientTCP.player.ToString() + "|";
                             msg += mouseOver.x + "|";
                             msg += mouseOver.y + "|";
                             msg += startDrag.x + "|";

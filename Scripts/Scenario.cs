@@ -70,6 +70,8 @@ public class Scenario : Global
           }
           if (isPossible)
           {
+                        Debug.Log(count);
+                        Debug.Log(ToBoardCoordinates(boardCoordinate));
             tutorialCubes[count].transform.position =
               (Vector3.right * ToBoardCoordinates(boardCoordinate).x) +
               (Vector3.forward * ToBoardCoordinates(boardCoordinate).y) +
@@ -101,32 +103,14 @@ public class Scenario : Global
     TryPlaceNewPiece(1);
     TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
     TryMovePiece(
-      new Vector2(1 * caseLength, 3 * caseLength),
+      new Vector2(1 * caseLength, 2 * caseLength),
       new Vector2(1 * caseLength, 1 * caseLength));
     TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
     TryMovePiece(
-      new Vector2(3 * caseLength, 2 * caseLength),
+      new Vector2(6 * caseLength, 2 * caseLength),
       new Vector2(6 * caseLength, 1 * caseLength));
     TryPlaceNewPiece(1);
-    TryPlaceNewPiece(0);
-    TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
-    TryMovePiece(
-      new Vector2(4 * caseLength, 1 * caseLength),
-      new Vector2(6 * caseLength, 1 * caseLength));
-    TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
-    TryMovePiece(
-      new Vector2(2 * caseLength, 2 * caseLength),
-      new Vector2(1 * caseLength, 1 * caseLength));
-    TryPlaceNewPiece(1);
-    TryPlaceNewPiece(0);
-    TrySelectPiece(new Vector2(6 * caseLength, 1 * caseLength), 1);
-    TryMovePiece(
-      new Vector2(3 * caseLength, 0 * caseLength),
-      new Vector2(6 * caseLength, 1 * caseLength));
-    TrySelectPiece(new Vector2(1 * caseLength, 1 * caseLength), 0);
-    TryMovePiece(
-      new Vector2(1 * caseLength, 1 * caseLength),
-      new Vector2(1 * caseLength, 1 * caseLength));
+    TryPlaceNewPiece(0);    
   }
 
   public override void TrySelectPiece(Vector2 mouseOver, int player)
@@ -138,7 +122,7 @@ public class Scenario : Global
 
   public override void TryMovePiece(Vector2 mouseOver, Vector2 startDrag)
   {
-    base.TryMovePiece(mouseOver, startDrag);
-    RemoveCube();
+        RemoveCube();
+        base.TryMovePiece(mouseOver, startDrag);
   }
 }
