@@ -1,6 +1,6 @@
-standardMove[1]=Les Pions <b> bougent LATERALLEMENT </b> et <b> MANGE sur les DIGONALES </b> comme aux échecs.
-ecceMove[1]=Une Pièce Ecce se <b> DÉPLACE et MANGE LATERALLEMENT et en DIAGONALES </b>, comme le roi aux échecs. Placez un pion normal sur votre pion ECCE pour <b>l'améliorer </b>.
-score[1]=Pour marquer des points, placez un pion <b> sur la case ENTER de votre adversaire </b>.
+standardMove[1]=- Les Pions <b> bougent LATERALLEMENT </b> et <b> MANGE sur les DIGONALES </b> comme aux échecs. \n- Cliquer sur les bancs pour en placer un.
+ecceMove[1]=- Une Pièce Ecce se <b> DÉPLACE et MANGE LATERALLEMENT et en DIAGONALES </b>, comme le roi aux échecs. \n- Placez un pion normal sur votre pion ECCE pour <b>l'améliorer </b>.
+score[1]=- Pour marquer des points, placez un pion <b> sur la case ENTER de votre adversaire </b>.
 
 winner[0]=WHITE
 winner[1]=BLACK

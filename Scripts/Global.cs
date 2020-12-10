@@ -46,18 +46,13 @@ public class Global : MonoBehaviour
   /**** View ****/
   protected Piece selectedPiece;
 
-  /*
-   * Gather all components.
-   * Generate Pieces.
-   */
-  public void Start()
-  {
+    public virtual void Start()
+    {
         EcceInstance = this;
-        Debug.Log("by connect button");
-    scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
-    scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
-    this.GeneratePieces();
-  }
+        scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
+        scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
+        this.GeneratePieces();
+    }
 
   /*
    * Allow us to detect click, and drag and drop event.
