@@ -41,11 +41,14 @@ public class UIRule : MonoBehaviour
                 isBanchUnderstood = false;
                 showPanelGuidelinesEcce = false;
                 showPanelGuidelinesScore = false;
-                showPanelGuidelinesBanch = true;
+                showPanelGuidelinesBanch = false;
                 numberOfunderstoodRules = 0;
-            } else
+                ButtonToggleGuidelines.GetComponentInChildren<TMP_Text>().text = "Guidelines" + "\n";
+            }
+            else
             {
                 ButtonToggleGuidelines.GetComponent<Image>().color = new Color32(27, 183, 46, 255);
+                showPanelGuidelinesBanch = true;
             }
         });
         UnderstoodGuidelinesEcce(() => {
@@ -60,6 +63,7 @@ public class UIRule : MonoBehaviour
             isBanchUnderstood = !isBanchUnderstood;
             numberOfunderstoodRules++;
         });
+        ButtonToggleGuidelines.GetComponentInChildren<TMP_Text>().text = "Guidelines" + "\n";
     }
 
     void ToggleGuidelines(UnityAction action)
@@ -85,17 +89,16 @@ public class UIRule : MonoBehaviour
 
     // Update is called once per frame
     private void Update()
-    {
-        Vector2 mouseOver;
-        bool physicsEcceBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-        out RaycastHit hit, 25.0f, LayerMask.GetMask("EcceBoard"));
-        if (physicsEcceBoard)
+    { 
+        if (Camera.main && Input.GetMouseButtonDown(0) && areGuidelinesOn)
         {
-            mouseOver.x = (int)hit.point.x;
-            mouseOver.y = (int)hit.point.z;
-            Vector2 boardCoordinates = Scenario.EcceInstance.ToArrayCoordinates(mouseOver);
-            if (Camera.main && Input.GetMouseButtonDown(0) && areGuidelinesOn)
-            {
+            bool physicsEcceBoard = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+            out RaycastHit hit, 25.0f, LayerMask.GetMask("EcceBoard"));
+            if (physicsEcceBoard) {
+                Vector2 mouseOver;
+                mouseOver.x = (int)hit.point.x;
+                mouseOver.y = (int)hit.point.z;
+                Vector2 boardCoordinates = Scenario.EcceInstance.ToArrayCoordinates(mouseOver);
                 if ((boardCoordinates.y == 4 && boardCoordinates.x == 1) || (boardCoordinates.y == 4 && boardCoordinates.x == 6))
                 {
                     showPanelGuidelinesEcce = true;
@@ -106,12 +109,11 @@ public class UIRule : MonoBehaviour
                 }
             }
         }
-        if (areGuidelinesOn)
-        {
-            PanelGuidelinesBanch.SetActive(showPanelGuidelinesBanch && !isBanchUnderstood);
-            PanelGuidelinesEcce.SetActive(showPanelGuidelinesEcce && !isEcceUnderstood);
-            PanelGuidelinesScore.SetActive(showPanelGuidelinesScore && !isScoreUnderstood);
-        }
-        ButtonToggleGuidelines.GetComponentInChildren<TMP_Text>().text = "Guidelines" + "\n" + numberOfunderstoodRules + "/3";
+ 
+            ButtonToggleGuidelines.GetComponentInChildren<TMP_Text>().text = "Guidelines" + "\n" + numberOfunderstoodRules + "/3";
+            PanelGuidelinesBanch.SetActive(areGuidelinesOn && showPanelGuidelinesBanch && !isBanchUnderstood);
+            PanelGuidelinesEcce.SetActive(areGuidelinesOn && showPanelGuidelinesEcce && !isEcceUnderstood);
+            PanelGuidelinesScore.SetActive(areGuidelinesOn && showPanelGuidelinesScore && !isScoreUnderstood);
+        
     }
 }

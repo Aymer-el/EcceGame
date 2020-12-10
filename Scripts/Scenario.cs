@@ -12,9 +12,7 @@ public class Scenario : Global
 
     public override void Start()
     {
-        scoreWhite = GameObject.Find("scoreWhite").GetComponent<Text>();
-        scoreBlack = GameObject.Find("scoreBlack").GetComponent<Text>();
-        this.GeneratePieces();
+        base.Start();
         for (var i = 0; i < tutorialCubes.Length; i++)
         {
             tutorialCubes[i] = GenerateCube(tutorialCubePrefab);
