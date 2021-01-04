@@ -66,7 +66,7 @@ public class Global : MonoBehaviour
 
     public bool CanPlay()
     {
-        return true;// (isWhite && player == 0) || (!isWhite && player == 1);
+        return true;
     }
 
   /*
