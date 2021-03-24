@@ -1,0 +1,20 @@
+standardMove[1]=- Pawns <b>MOVES LATERAL</b> and <b>EATS on the DIGONALES</b> like in chess. \n- Click on the banch to place one.
+ecceMove[1]=- Ecce piece <b>MOVES and EATS LATERALS and on the DIAGONALES</b>, like the king in chess. \n- Place a normal pawn on your ECCE case to <b>upgrade</b>.
+score[1]=- To mark points place a piece <b>on the ENTER case of your adversary</b>.
+
+
+winner[0]=WHITE
+winner[1]=BLACK
+winner[2]= WINS
+
+menuStandartPiece=PAWN
+menuPalPiece=KING - ECCE
+menuScore=SCORE
+menuExit=EXIT
+
+menuToggle=MENU
+menuShare=SHARE
+menuNewGame=NEW GAME
+menuRules=RULES
+menuSound=SOUND
+menuCredits=CRE-DITS
